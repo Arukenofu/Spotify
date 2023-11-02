@@ -1,0 +1,36 @@
+{
+  "name": "Spotify",
+  "version": "0.1.0",
+  "description": "A minimal Electron + Vue application",
+  "main": "build/main/main.js",
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "build": "node scripts/build.js && electron-builder",
+    "build:win": "node scripts/build.js && electron-builder --win",
+    "build:mac": "node scripts/build.js && electron-builder --mac",
+    "build:linux": "node scripts/build.js && electron-builder --linux"
+  },
+  "repository": "https://github.com/deluze/electron-vue-template",
+  "author": {
+    "name": "Deluze",
+    "url": "https://github.com/Deluze"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "chalk": "^4.1.2",
+    "chokidar": "^3.5.3",
+    "electron": "^25.2.0",
+    "electron-builder": "^24.2.1",
+    "sass": "^1.69.3",
+    "sass-loader": "^13.3.2",
+    "typescript": "^4.8.4",
+    "vite": "^4.1.1"
+  },
+  "dependencies": {
+    "@vueuse/core": "^10.5.0",
+    "axios": "^1.5.1",
+    "pinia": "^2.1.7",
+    "vue": "^3.2.47",
+    "vue-router": "^4.2.5"
+  }
+}
