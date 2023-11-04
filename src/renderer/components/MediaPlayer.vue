@@ -1,6 +1,6 @@
 <script setup>
 import {computed, onMounted, ref, watch} from "vue";
-import {useMediaControls} from '@vueuse/core'
+import { useMediaControls } from '@vueuse/core'
 import {musicStore} from "../stores/MusicStore";
 
 const store = musicStore();
@@ -64,9 +64,13 @@ watch(currentMusic,
 
 watch(currentTime,
     () => {
-      if (currentTime.value === duration.value && store.currentMusic !== store.music.length-1) {
+      if (currentTime.value === duration.value) {
         if (store.isShuffled) {
-          store.currentMusic = Math.floor(Math.random() * (store.music.length));
+          store.currentMusic = Math.floor(Math.random() * store.music.length)
+          return;
+        }
+        if (store.currentMusic !== store.music.length-1) {
+          store.currentMusic++;
         }
       }
     }

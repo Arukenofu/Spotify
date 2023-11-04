@@ -1,7 +1,7 @@
 <script setup>
 import {musicStore} from "../stores/MusicStore";
 import {useMediaControls} from "@vueuse/core";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 
 const store = musicStore();
 
@@ -19,10 +19,7 @@ const filterByAmount = (value) => {
   }
 }
 
-const shuffleAlbum = () => {
-  const shuffled = Math.random(0.5) * album.musics.id;
-  console.log(shuffled);
-}
+
 </script>
 
 <template>
@@ -45,11 +42,12 @@ const shuffleAlbum = () => {
     </div>
     <div class="header-top">
       <div class="album-info">
-        <div class="album-picture" />
-
+        <div class="album-picture" v-if="store.albums[store.currentPlaylistId-1]" :style="`background-image: url('${store.albums[store.currentPlaylistId-1].picture}')`" />
+        <div class="album-picture" v-else></div>
         <div class="album-text-info">
           <p>PLAYLIST</p>
-          <h1>Severe asphyxiya</h1>
+          <h1 v-if="store.albums[store.currentPlaylistId-1]">{{store.albums[store.currentPlaylistId].name}}</h1>
+          <h1 v-else>Current Playlist</h1>
 
           <div class="info">
             <div class="creator-avatar "/>
@@ -77,16 +75,18 @@ const shuffleAlbum = () => {
         </div>
 
         <div class="albums-wrap">
-          <div class="rows" v-for="album in store.music" @click="
-                store.currentMusic = album.id-1;
-                playing = !playing">
+          <div class="rows" v-for="(album, index) in store.music" @click="
+                store.currentMusic = index;
+                playing = !playing; console.log(store.currentMusic)"
+                :class="album.name === store.music[store.currentMusic].name ? 'picked' : '' "
+          >
             <div class="nums">
-              {{album.id}}
+              {{index+1}}
             </div>
             <div class="name">
               <div class="artist" :style="`background-image: url('${album.image}')`" />
               <div class="text">
-                <h4>{{album.name}}</h4>
+                <h4 :style="album.name === store.music[store.currentMusic].name ? 'color: #2BD268;' : '' ">{{album.name}}</h4>
                 <p>{{album.singer}}</p>
               </div>
             </div>
@@ -189,7 +189,6 @@ const shuffleAlbum = () => {
       .album-picture {
         height: 100%;
         aspect-ratio: 1/1;
-        background-image: url("https://i.scdn.co/image/ab67706c0000da84c03a8be99d4550901c2f5321");
         background-position: center;
         background-size: cover;
         border-radius: 5px;
@@ -310,6 +309,9 @@ const shuffleAlbum = () => {
             font-size: 1rem;
             font-weight: 600;
           }
+          .text-active {
+            background-color: rgb(43, 210, 104);
+          }
           p {
             font-size: 0.8rem;
             font-weight: 300;
@@ -317,6 +319,9 @@ const shuffleAlbum = () => {
           }
         }
       }
+    }
+    .picked {
+      background-color: #232323;
     }
   }
 }

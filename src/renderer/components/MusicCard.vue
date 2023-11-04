@@ -1,7 +1,7 @@
 <script setup>
 import {musicStore} from "../stores/MusicStore";
 import {useMediaControls} from "@vueuse/core/index";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 
 const store = musicStore();
 const {albums} = store;
@@ -15,11 +15,12 @@ const togglePlayingValue = (value) => {
   }
 }
 
-
+console.log(albums)
+console.log(store.albums)
 </script>
 
 <template>
-  <div class="music-wrap">
+  <div class="music-wrap" v-if="store.albums.length">
     <div
         class="music"
         v-for="album in albums"

@@ -2,6 +2,7 @@
 import {reactive, ref, watch} from "vue";
 import axios from "axios";
 import router from "../router";
+import {musicStore} from "../stores/MusicStore";
 
 const isRegister = ref(false)
 const errors = ref([]);
@@ -47,6 +48,7 @@ const LogIn = async () => {
   try {
     const response = await axios.post('http://localhost:3000/login', loginData)
     localStorage.setItem("token", response.data)
+    await musicStore().fetchMainAlbums();
     await router.push('/')
   } catch (e) {
     errors.value.push(e?.response?.data?.message);

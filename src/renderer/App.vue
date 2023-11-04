@@ -1,19 +1,23 @@
 <script setup>
 import NavBar from "./components/NavBar.vue";
 import MediaPlayer from "./components/MediaPlayer.vue";
-import {onMounted, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {musicStore} from "./stores/MusicStore";
 import {useRoute} from "vue-router";
+import axios from "axios";
+import router from "./router";
 
 const store = musicStore();
 const route = useRoute()
 
 const isLoading = ref(false)
 
+
 onMounted(async () => {
+  await store.fetchMainAlbums();
   await store.fetchGlobalMusic();
+  await store.checkToken();
   isLoading.value = true;
-  await store.checkToken()
 })
 
 watch(route, () => store.checkToken(), {deep: true})
