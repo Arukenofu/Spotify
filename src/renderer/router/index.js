@@ -5,6 +5,7 @@ import FavoriteView from "../views/FavoriteView.vue";
 import PlaylistView from "../views/PlaylistView.vue";
 import TracksView from "../views/TracksView.vue";
 import AuthView from "../views/AuthView.vue";
+import FavoriteMusics from "../views/FavoriteMusics.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,11 @@ const router = createRouter({
       path: '/favorite',
       name: 'Favorite',
       component: FavoriteView
+    },
+    {
+      path: '/fav-musics',
+      name: 'Favorite musics',
+      component: FavoriteMusics
     },
     {
       path: '/playlists',

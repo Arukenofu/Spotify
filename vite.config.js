@@ -10,9 +10,6 @@ const path = require("path");
 const config = defineConfig({
     root: Path.join(__dirname, 'src', 'renderer'),
     publicDir: 'public',
-    server: {
-        port: 8080,
-    },
     open: false,
     build: {
         outDir: Path.join(__dirname, 'build', 'renderer'),

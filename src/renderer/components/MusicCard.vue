@@ -39,7 +39,7 @@ console.log(store.albums)
                   togglePlayingValue(album);
           "
           >
-            {{store.music == album.musics && playing ?  'pause' : 'play_arrow'}}
+            {{store.music === album.musics && playing ?  'pause' : 'play_arrow'}}
           </button>
         </div>
         <div class="text">

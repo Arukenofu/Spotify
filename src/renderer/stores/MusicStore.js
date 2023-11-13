@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import router from "../router";
 import axios from "axios";
 
@@ -152,6 +152,7 @@ export const musicStore = defineStore('', () => {
             return;
         }
         const res = await axios.get("http://localhost:3000/albums")
+        console.log(res.data)
         musicStore().albums = res.data;
     }
 
@@ -176,6 +177,8 @@ export const musicStore = defineStore('', () => {
         }
     }
 
+    const recentlyPlayed = reactive([]);
+
     const search = ref('');
     const isShuffled = ref(false);
 
@@ -191,6 +194,7 @@ export const musicStore = defineStore('', () => {
         fetchGlobalMusic,
         checkToken,
         isShuffled,
-        fetchMainAlbums
+        fetchMainAlbums,
+        recentlyPlayed
     }
 })

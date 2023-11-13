@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.5.0",
+    "@vueuse/sound": "^2.0.1",
     "axios": "^1.5.1",
     "pinia": "^2.1.7",
     "vue": "^3.2.47",

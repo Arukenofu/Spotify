@@ -1,7 +1,9 @@
 <script setup>
 import {musicStore} from "../stores/MusicStore";
 import {useMediaControls} from "@vueuse/core";
-import {computed, ref} from "vue";
+import {computed, onBeforeMount, onMounted, onUnmounted, onUpdated, reactive, ref} from "vue";
+import axios from "axios";
+import TopNav from "../components/TopNav.vue";
 
 const store = musicStore();
 
@@ -19,45 +21,38 @@ const filterByAmount = (value) => {
   }
 }
 
+const isStoreAlbum = () => {
+  return store.albums[store.currentPlaylistId-1] && store.albums[store.currentPlaylistId-1].musics === store.music
+}
+
+const currentMusic = computed(() => {
+  return store.albums[store.currentPlaylistId-1]
+})
 
 </script>
 
 <template>
   <div class="frame">
-    <div class="nav">
-      <div class="back-option material-symbols-outlined">
-        arrow_back_ios
-      </div>
-
-      <div class="other">
-        <div class="bell">
-          <span class="material-symbols-outlined">
-            notifications
-          </span>
-        </div>
-        <div class="user">
-
-        </div>
-      </div>
-    </div>
+    <top-nav />
     <div class="header-top">
       <div class="album-info">
-        <div class="album-picture" v-if="store.albums[store.currentPlaylistId-1]" :style="`background-image: url('${store.albums[store.currentPlaylistId-1].picture}')`" />
-        <div class="album-picture" v-else></div>
+        <div class="album-picture" v-if="isStoreAlbum()"
+             :style="`background-image: url('${currentMusic.picture}')`" />
         <div class="album-text-info">
           <p>PLAYLIST</p>
-          <h1 v-if="store.albums[store.currentPlaylistId-1]">{{store.albums[store.currentPlaylistId].name}}</h1>
+          <h1 v-if="isStoreAlbum()">{{currentMusic.name}}</h1>
           <h1 v-else>Current Playlist</h1>
 
           <div class="info">
-            <div class="creator-avatar "/>
-            <h6>pansuman &nbsp;<span> 18 tracks</span>, &nbsp;<span>15 min. 51 sec.</span></h6>
+            <div class="creator-avatar" v-if="isStoreAlbum()" />
+            <h6>
+              {{isStoreAlbum() ? 'pansuman' : ''}}  <span> {{isStoreAlbum() ? currentMusic.tracksamount : store.music.length}} tracks</span> &nbsp;<span v-if="isStoreAlbum()">15 min. 51 sec.</span>
+            </h6>
           </div>
         </div>
       </div>
     </div>
-
-      <div class="music-list">
+    <div class="music-list">
         <div class="album-headers">
           <div class="nums">
             #
@@ -174,17 +169,16 @@ const filterByAmount = (value) => {
   }
 
   .header-top {
-      max-width: 100vw;
-      height: 300px;
-      background: linear-gradient(360deg, #313131 0%, #363636 100%);
-      padding: 1px 21px;
+    max-width: 100vw;
+    height: 300px;
+    background: linear-gradient(360deg, #313131 0%, #363636 100%);
+    padding: 1px 21px;
 
     .album-info {
       margin-top: 84px;
       display: flex;
       align-items: end;
       height: calc(100% - 80px - 25px);
-      gap: 25px;
 
       .album-picture {
         height: 100%;
@@ -195,6 +189,7 @@ const filterByAmount = (value) => {
       }
 
       .album-text-info {
+        margin-left: 25px;
         p {
           text-transform: uppercase;
           font-size: 0.8rem;

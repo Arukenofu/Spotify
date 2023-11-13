@@ -10,7 +10,7 @@ const currentMusic = computed(() => {
 })
 
 const currentAudio = computed(() => {
-  return store.music[currentMusic.value];
+  return store.music[currentMusic.value]
 })
 
 const audio = ref();
@@ -52,10 +52,11 @@ onMounted(() => {
 })
 
 watch(currentMusic,
-    () => {
+    (value) => {
       useMediaControls(audio, {
         src: ref(currentAudio.value.song)
       });
+
       setTimeout(() => {
         playing.value = true;
       }, 30)
@@ -86,6 +87,8 @@ watch(() => store.music,
       }, 10);
     },
     {deep: true})
+
+
 </script>
 
 <template>
