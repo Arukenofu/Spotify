@@ -1,8 +1,8 @@
 import {defineStore} from "pinia";
 import {reactive, ref} from "vue";
 
-export const UserStore = defineStore('User',() => {
-    const users = reactive([
+export const UserStore = defineStore('User',():any => {
+    const users = ref([
         {
             id: 0,
             name: 'Amber Holmes',
@@ -57,7 +57,7 @@ export const UserStore = defineStore('User',() => {
             avatar: 'https://media.licdn.com/dms/image/D4E03AQGihpp8y8BaWw/profile-displayphoto-shrink_800_800/0/1672728714464?e=2147483647&v=beta&t=kRrxxla1h1ugH_uLdng6KHz4WKgL6dx6libb01faOGk',
             hearingMusicID: 24,
         },
-    ])
+    ]);
 
     const token = ref('')
 

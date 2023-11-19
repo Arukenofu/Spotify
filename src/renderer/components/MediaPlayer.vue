@@ -51,11 +51,31 @@ onMounted(() => {
   audioVolume.value = volume.value * 100;
 })
 
+navigator.mediaSession.setActionHandler('previoustrack', () => {
+  DecrementMusicID();
+})
+
+navigator.mediaSession.setActionHandler('nexttrack', () => {
+  IncrementMusicID();
+})
+
 watch(currentMusic,
     (value) => {
       useMediaControls(audio, {
         src: ref(currentAudio.value.song)
       });
+
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: currentAudio.value.name,
+        artist: currentAudio.value.singer,
+        artwork: [
+          {
+            src: currentAudio.value.image,
+            type: "image/png",
+            sizes: "500x500"
+          }
+        ]
+      })
 
       setTimeout(() => {
         playing.value = true;
@@ -88,6 +108,21 @@ watch(() => store.music,
     },
     {deep: true})
 
+watch(audio, (value) => {
+  store.audio = value;
+}, {deep: true})
+
+document.addEventListener('keyup', event => {
+  if (event.code === 'Enter') {
+    playing.value = !playing.value
+  }
+  if (event.code === 'ArrowLeft') {
+    DecrementMusicID();
+  }
+  if (event.code === 'ArrowRight') {
+    IncrementMusicID();
+  }
+})
 
 </script>
 

@@ -2,6 +2,7 @@
 import {musicStore} from "../stores/MusicStore";
 import {useMediaControls} from "@vueuse/core/index";
 import {onMounted, ref} from "vue";
+import router from "../router";
 
 const store = musicStore();
 const {albums} = store;
@@ -15,8 +16,9 @@ const togglePlayingValue = (value) => {
   }
 }
 
-console.log(albums)
-console.log(store.albums)
+onMounted(() => {
+  playing.value = store.playing;
+})
 </script>
 
 <template>
@@ -27,7 +29,7 @@ console.log(store.albums)
         :key="album.id"
         :style="`background-image: url(${album.picture})`"
     >
-      <p>{{album.tracksAmount}} Tracks</p>
+      <p>{{album.musics.length}} Tracks</p>
 
       <div class="info-playlist">
         <div class="play">
@@ -42,7 +44,7 @@ console.log(store.albums)
             {{store.music === album.musics && playing ?  'pause' : 'play_arrow'}}
           </button>
         </div>
-        <div class="text">
+        <div class="text" @click="router.push(`/playlists/${album.id}`)">
           <h3>{{album.name}}</h3>
           <p>{{album.description}}</p>
         </div>
@@ -112,6 +114,7 @@ console.log(store.albums)
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        cursor: pointer;
 
         h3 {
           font-weight: 500;

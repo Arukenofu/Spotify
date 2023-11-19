@@ -7,7 +7,7 @@ function createWindow () {
     minHeight: 725,
     width: 1200,
     minWidth: 1200,
-    icon: join(__dirname, 'logo.png'),
+    icon: "C:\\Users\\Admin\\Desktop\\VueElectronTest-master\\src\\main\\logo.png",
     backgroundColor: '#000000',
     titleBarStyle: "hidden",
     titleBarOverlay: {

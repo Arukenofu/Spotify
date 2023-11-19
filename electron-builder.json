@@ -10,7 +10,8 @@
         "shortcutName": "Electron App"
     },
     "win": {
-        "target": "nsis"
+        "target": "nsis",
+        "icon": "build/renderer/logo.png"
     },
     "linux":  {
         "target": ["snap"]

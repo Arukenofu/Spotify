@@ -4,10 +4,19 @@ import {useMediaControls} from "@vueuse/core";
 import {computed, onBeforeMount, onMounted, onUnmounted, onUpdated, reactive, ref} from "vue";
 import axios from "axios";
 import TopNav from "../components/TopNav.vue";
+import {useRoute} from "vue-router";
+const route = useRoute()
 
 const store = musicStore();
 
-const album = store.albums[store.currentPlaylistId]
+const album = store.albums[store.currentPlaylistId];
+const colors = ref([])
+
+onMounted(async () => {
+  playing.value = store.playing;
+  isStoreAlbum() ?  colors.value = (await axios.post('http://localhost:3000/color', {image: currentMusic.value.picture})).data : '';
+  console.log(colors.value)
+})
 
 const audio = ref(document.getElementById('musicRoot'))
 
@@ -22,19 +31,41 @@ const filterByAmount = (value) => {
 }
 
 const isStoreAlbum = () => {
-  return store.albums[store.currentPlaylistId-1] && store.albums[store.currentPlaylistId-1].musics === store.music
+  return store.albums[store.currentPlaylistId-1] && store.albums[store.currentPlaylistId-1].musics === store.music || store.albums[route.params.id-1].musics;
 }
 
 const currentMusic = computed(() => {
+  if (route.params.id) {
+    return store.albums[route.params.id-1]
+  }
   return store.albums[store.currentPlaylistId-1]
 })
+
+const currentAlbum = computed(() => {
+  if (route.params.id) {
+    return store.albums[route.params.id-1].musics;
+  }
+  return store.music;
+})
+
+const checkParams = () => {
+  if (route.params.id) {
+    store.music = store.albums[route.params.id-1].musics;
+    store.currentPlaylistId = route.params.id+1
+  }
+}
+
+console.log(currentAlbum.value)
 
 </script>
 
 <template>
-  <div class="frame">
-    <top-nav />
-    <div class="header-top">
+  <div class="frame" >
+    <top-nav :style="isStoreAlbum() ? `background-color: ${colors[0]}` : ''" />
+    <div class="header-top" :style="
+      isStoreAlbum() ?
+      `background-color: ${colors[0]}` : 'background: linear-gradient(360deg, #313131 0%, #363636 100%);'"
+    >
       <div class="album-info">
         <div class="album-picture" v-if="isStoreAlbum()"
              :style="`background-image: url('${currentMusic.picture}')`" />
@@ -52,6 +83,7 @@ const currentMusic = computed(() => {
         </div>
       </div>
     </div>
+    {{}}
     <div class="music-list">
         <div class="album-headers">
           <div class="nums">
@@ -68,10 +100,10 @@ const currentMusic = computed(() => {
           </div>
           <div class="music-options" />
         </div>
-
         <div class="albums-wrap">
-          <div class="rows" v-for="(album, index) in store.music" @click="
+          <div class="rows" v-for="(album, index) in currentAlbum" @click="
                 store.currentMusic = index;
+                checkParams()
                 playing = !playing; console.log(store.currentMusic)"
                 :class="album.name === store.music[store.currentMusic].name ? 'picked' : '' "
           >
@@ -171,7 +203,6 @@ const currentMusic = computed(() => {
   .header-top {
     max-width: 100vw;
     height: 300px;
-    background: linear-gradient(360deg, #313131 0%, #363636 100%);
     padding: 1px 21px;
 
     .album-info {

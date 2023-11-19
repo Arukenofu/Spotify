@@ -31,7 +31,7 @@ const router = createRouter({
       component: FavoriteMusics
     },
     {
-      path: '/playlists',
+      path: '/playlists/:id?',
       name: 'Playlist',
       component: PlaylistView
     },

@@ -6,7 +6,7 @@ import GenresFilter from "../components/GenresFilter.vue";
 import TracksOfTheWeek from "../components/TracksOfTheWeek.vue";
 import RecentArtists from "../components/RecentArtists.vue";
 import router from "../router";
-
+import {onMounted} from "vue";
 
 </script>
 

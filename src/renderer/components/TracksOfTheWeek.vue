@@ -1,6 +1,6 @@
 <script setup>
 import {musicStore} from "../stores/MusicStore";
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useMediaControls} from "@vueuse/core";
 
 const store = musicStore();
@@ -30,7 +30,9 @@ const togglePlayArrowById = (el) => {
     return 'play_arrow'
   }
 }
-
+onMounted(() => {
+  playing.value = store.playing;
+})
 </script>
 
 <template>

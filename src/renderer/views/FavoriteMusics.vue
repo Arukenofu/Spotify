@@ -1,12 +1,16 @@
 <script setup>
 import TopNav from "../components/TopNav.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useMediaControls} from "@vueuse/core";
 import {musicStore} from "../stores/MusicStore";
 
 const store = musicStore();
 const audio = ref(document.getElementById('musicRoot'))
 const {playing} = useMediaControls(audio);
+
+onMounted(() => {
+  playing.value = store.playing;
+})
 
 const togglePlayArrowById = (el) => {
   if (playing.value) {

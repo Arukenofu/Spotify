@@ -1,6 +1,35 @@
 <script setup>
 import {ref} from "vue";
+import router from "../router";
+import axios from "axios";
 const value = ref('')
+
+const logout = async() => {
+  localStorage.removeItem('token');
+  await router.push('/auth')
+}
+
+// const setAvatar = async () => {
+//   await axios.post('http://localhost:3000/avatar', {id: 326, image: preview.value});
+// }
+
+// const isModalActive = ref(true);
+//
+// const preview = ref(null);
+
+// const previewImage = (event) => {
+//   const input = event.target;
+//
+//   if (input.files) {
+//     let reader = new FileReader();
+//
+//     reader.onload = (e) => {
+//       preview.value = e.target.result;
+//     }
+//     reader.readAsDataURL(input.files[0]);
+//   }
+// }
+
 </script>
 
 <template>
@@ -40,7 +69,7 @@ const value = ref('')
       </div>
 
       <div class="account">
-        <div class="user-profile" />
+        <div class="user-profile" @click="logout()" />
       </div>
 
     </div>

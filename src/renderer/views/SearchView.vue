@@ -8,6 +8,10 @@ import {useMediaControls} from "@vueuse/core/index";
 const store = musicStore();
 const {globalMusic, albums} = store;
 
+onMounted(() => {
+  playing.value = store.playing;
+})
+
 const search = ref('')
 const changeSearch = (value) => {
   search.value = value;

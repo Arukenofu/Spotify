@@ -1,7 +1,8 @@
 import {defineStore} from 'pinia'
-import {reactive, ref, watch} from "vue";
+import {computed, reactive, ref, watch} from "vue";
 import router from "../router";
 import axios from "axios";
+import {useMediaControls} from "@vueuse/core";
 
 export const musicStore = defineStore('', () => {
     const currentPlaylistId = ref(null)
@@ -182,6 +183,10 @@ export const musicStore = defineStore('', () => {
     const search = ref('');
     const isShuffled = ref(false);
 
+    const audio = ref(document.getElementById('musicRoot'));
+
+    const {playing} = useMediaControls(audio)
+
     return {
         music: currentPlaylist,
         currentMusic: currentMusicId,
@@ -195,6 +200,8 @@ export const musicStore = defineStore('', () => {
         checkToken,
         isShuffled,
         fetchMainAlbums,
-        recentlyPlayed
+        recentlyPlayed,
+        audio,
+        playing
     }
 })

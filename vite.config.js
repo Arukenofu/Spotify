@@ -16,6 +16,7 @@ const config = defineConfig({
         emptyOutDir: true,
     },
     plugins: [vuePlugin()],
+
 });
 
 module.exports = config;

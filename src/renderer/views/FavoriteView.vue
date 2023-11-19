@@ -1,7 +1,7 @@
 <script setup>
 import TopNav from "../components/TopNav.vue";
 import {musicStore} from "../stores/MusicStore";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useMediaControls} from "@vueuse/core";
 import router from "../router";
 
@@ -21,6 +21,10 @@ const getDate = () => {
     return "Good Evening"
   }
 }
+
+onMounted(() => {
+  playing.value = store.playing;
+})
 
 const audio = ref(document.getElementById('musicRoot'))
 const {playing} = useMediaControls(audio);
