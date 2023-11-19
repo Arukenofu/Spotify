@@ -14,8 +14,11 @@ const colors = ref([])
 
 onMounted(async () => {
   playing.value = store.playing;
-  isStoreAlbum() ?  colors.value = (await axios.post('http://localhost:3000/color', {image: currentMusic.value.picture})).data : '';
-  console.log(colors.value)
+  isStoreAlbum() ? colors.value = (await axios.post('http://localhost:3000/color', {image: currentMusic.value.picture})).data : '';
+  console.log(store.albums[store.currentPlaylistId-1].musics === store.music)
+  console.log(store.music)
+  console.log()
+  console.log()
 })
 
 const audio = ref(document.getElementById('musicRoot'))
@@ -30,8 +33,14 @@ const filterByAmount = (value) => {
   }
 }
 
+
+
 const isStoreAlbum = () => {
-  return store.albums[store.currentPlaylistId-1] && store.albums[store.currentPlaylistId-1].musics === store.music || store.albums[route.params.id-1].musics;
+  if (store.currentPlaylistId) {
+    return store.albums[store.currentPlaylistId - 1].musics === store.music;
+  } else {
+    return false
+  }
 }
 
 const currentMusic = computed(() => {

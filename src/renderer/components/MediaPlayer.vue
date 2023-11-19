@@ -46,7 +46,7 @@ const IncrementMusicID = () => {
   store.currentMusic !== store.music.length-1 ? store.currentMusic++ : ''
 }
 
-onMounted(() => {
+onMounted(async () => {
   volume.value = 0.2;
   audioVolume.value = volume.value * 100;
 })
