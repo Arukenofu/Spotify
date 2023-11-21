@@ -47,7 +47,10 @@ const LogIn = async () => {
 
   try {
     const response = await axios.post('http://localhost:3000/login', loginData)
-    localStorage.setItem("token", response.data)
+    localStorage.setItem("token", response.data.token)
+    localStorage.setItem("email", response.data.email)
+    localStorage.setItem("username", response.data.username);
+    localStorage.setItem("avatar", response.data.avatar)
     await musicStore().fetchMainAlbums();
     await router.push('/')
   } catch (e) {

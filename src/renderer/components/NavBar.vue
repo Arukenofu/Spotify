@@ -40,9 +40,11 @@
       </span>
     </router-link>
 
-    <span class="material-symbols-rounded more">
+    <router-link to="/settings">
+      <span class="material-symbols-rounded more">
         more_horiz
-      </span>
+    </span>
+    </router-link>
   </nav>
 </template>
 

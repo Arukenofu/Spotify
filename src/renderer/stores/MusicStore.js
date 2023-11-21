@@ -171,6 +171,9 @@ export const musicStore = defineStore('', () => {
         } catch (e) {
             if (e.response.status === 401) {
                 localStorage.removeItem('token')
+                localStorage.removeItem('email')
+                localStorage.removeItem("username");
+                localStorage.removeItem("avatar")
                 await router.push('/auth')
             } else {
                 console.error(e)
@@ -181,7 +184,6 @@ export const musicStore = defineStore('', () => {
     const recentlyPlayed = reactive([]);
 
     const search = ref('');
-    const isShuffled = ref(false);
 
     const audio = ref(document.getElementById('musicRoot'));
 
@@ -198,7 +200,6 @@ export const musicStore = defineStore('', () => {
         search, globalMusic,
         fetchGlobalMusic,
         checkToken,
-        isShuffled,
         fetchMainAlbums,
         recentlyPlayed,
         audio,

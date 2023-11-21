@@ -50,6 +50,23 @@ const togglePlayArrowById = (el) => {
   }
 }
 
+const addToCurrentPlaylist = (el) => {
+  const items = store.music.find(item => item.id === el.id)
+
+  if (items) {
+    return;
+  }
+
+  store.music.push(el)
+  store.currentPlaylistId = null;
+}
+
+const changeTo = (track) => {
+  store.music = globalMusic;
+  store.currentMusic = track.id-1;
+  playing.value = !playing.value
+}
+
 </script>
 
 <template>
@@ -89,26 +106,25 @@ const togglePlayArrowById = (el) => {
                 class="track"
                 v-for="track in bestTrack.slice(0, 4)"
                 :key="track.id"
-                @click="
-                store.music = globalMusic;
-                store.currentMusic = track.id-1;
-                playing = !playing"
+                @click.self="changeTo(track)"
             >
-              <div class="avatar-pole">
+              <div class="avatar-pole" @click="changeTo(track)">
                 <div class="avatar" :style="`background-image: url('${track.image}')`" />
                 <div class="play material-symbols-outlined">
                   {{togglePlayArrowById(track)}}
                 </div>
               </div>
-              <div class="music-info">
+              <div class="music-info" @click="changeTo(track)">
                 <h6 :style="store.music[store.currentMusic].name === track.name ? 'color: #2BD268;' : 'color: white'">
                   {{track.name}}
                 </h6>
                 <p>{{track.singer}}</p>
               </div>
               <div class="options">
-                <button class="favourite material-symbols-outlined">
-                  favorite
+                <button class="favourite material-symbols-outlined"
+                  @click="addToCurrentPlaylist(track)"
+                >
+                  add
                 </button>
                 <span>
                   {{filterByAmount(track.auditions)}}
@@ -345,7 +361,7 @@ const togglePlayArrowById = (el) => {
               align-items: center;
 
               .favourite {
-                font-size: 1.2rem;
+                font-size: 1.5rem;
                 display: none;
                 background-color: inherit;
                 border: none;

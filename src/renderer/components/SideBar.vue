@@ -16,18 +16,14 @@ const audio = ref(document.getElementById('musicRoot'));
 
 const {playing} = useMediaControls(audio);
 
-const changeMusic = (friendMusic) => {
-  store.music = store.globalMusic;
-  store.currentMusic = friendMusic.id;
-  playing.value = true;
-}
-
+// const changeMusic = (friendMusic) => {
+//   store.music = store.globalMusic;
+//   store.currentMusic = friendMusic.id;
+//   playing.value = true;
+// }
+//
 const friends = computed(() => {
-  const friends = [...users]
-  if (isOpened.value) {
-    return friends
-  }
-  return friends.slice(0, 5)
+  return users
 })
 </script>
 
@@ -43,20 +39,18 @@ const friends = computed(() => {
         </div>
         <keep-alive>
           <div class="friends-activity-wrap" :class="isOpened ? 'friend-activity-active' : 'friend-activity-inactive'">
-            <transition-group name="friendAnimation">
-              <div class="friend" v-for="friend in friends" :key="friend.id">
+              <div class="friend" v-if="users" v-for="friend in friends" :key="friend.id">
                 <div class="friend-pfp" :style="`background-image: url(${friend.avatar})`" />
                 <div class="friend-text">
-                  <h2>{{friend.name}}</h2>
-                  <button @click="changeMusic(friend)">
-                    {{store.globalMusic[friend.id].singer + ' - ' + store.globalMusic[friend.id].name}}
+                  <h2>{{friend.username}}</h2>
+                  <button @click="">
+                    {{store.globalMusic[friend.hearing].singer + ' - ' + store.globalMusic[friend.hearing].name}}
                   </button>
                 </div>
               </div>
-            </transition-group>
           </div>
         </keep-alive>
-        <button class="view-more" @click="isOpened =! isOpened">
+        <button class="view-more" @click="isOpened =! isOpened" v-if="friends.length >= 4">
           {{isOpened ? 'Close' : 'View All'}}
         </button>
       </div>
@@ -159,6 +153,7 @@ aside {
 
   .friend-activity-inactive {
     max-height: 425px;
+    height: 425px;
   }
 
   .friend-activity-active {

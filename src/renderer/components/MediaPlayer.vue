@@ -1,6 +1,6 @@
 <script setup>
 import {computed, onMounted, ref, watch} from "vue";
-import { useMediaControls } from '@vueuse/core'
+import {useMediaControls} from '@vueuse/core'
 import {musicStore} from "../stores/MusicStore";
 
 const store = musicStore();
@@ -34,6 +34,30 @@ const audioDuration = computed(() => {
   return minutes.padStart(2, 0) + ':' + seconds.padStart(2, 0)
 })
 
+const isShuffled = ref(false)
+
+const isRepeat = ref(0);
+
+const toggleRepeat = () => {
+  if (isRepeat.value === 2) {
+    isRepeat.value = 0;
+    return;
+  }
+  isRepeat.value++
+}
+
+const repeatState = computed(() => {
+  switch (isRepeat.value) {
+    case 2: return 'repeat_one_on';
+    default: return 'repeat'
+  }
+})
+
+const isLiked = () => {
+  return false
+}
+
+
 const DecrementMusicID = () => {
   store.currentMusic !== 0 ? store.currentMusic-- : '';
 }
@@ -46,8 +70,8 @@ const IncrementMusicID = () => {
   store.currentMusic !== store.music.length-1 ? store.currentMusic++ : ''
 }
 
-onMounted(async () => {
-  volume.value = 0.2;
+onMounted( async () => {
+  volume.value = 1;
   audioVolume.value = volume.value * 100;
 })
 
@@ -60,7 +84,7 @@ navigator.mediaSession.setActionHandler('nexttrack', () => {
 })
 
 watch(currentMusic,
-    (value) => {
+    () => {
       useMediaControls(audio, {
         src: ref(currentAudio.value.song)
       });
@@ -85,20 +109,38 @@ watch(currentMusic,
 
 watch(currentTime,
     () => {
-      if (currentTime.value === duration.value) {
-        if (store.isShuffled) {
-          store.currentMusic = Math.floor(Math.random() * store.music.length)
+      if (currentTime.value === duration.value && isRepeat.value !== 0) {
+        if (isRepeat.value === 2) {
+          currentTime.value = 0
+
+          setTimeout(() => {
+            playing.value = true
+          }, 100)
+
           return;
         }
+
+        if (isShuffled.value) {
+          store.currentMusic = Math.floor(Math.random() * store.music.length);
+          console.log('yes!')
+          return;
+        }
+
         if (store.currentMusic !== store.music.length-1) {
           store.currentMusic++;
         }
+
       }
     }
 )
 
 watch(() => store.music,
-    () => {
+    (value, oldValue) => {
+      const isReplacingArray = value !== oldValue;
+      if (!isReplacingArray) {
+        return;
+      }
+
       useMediaControls(audio, {
         src: ref(currentAudio.value.song)
       });
@@ -176,14 +218,14 @@ document.addEventListener('keyup', event => {
       </div>
 
       <div class="options">
-        <button class="material-symbols-outlined" @click="setFavorite(currentAudio)">
+        <button class="material-symbols-outlined" :style="isLiked() ? 'color: #2BD268;' : ''">
           favorite
         </button>
-        <button class="material-symbols-outlined">
-          send
+        <button class="material-symbols-outlined" @click="toggleRepeat()" :style="isRepeat ? 'color: #2BD268;' : ''">
+          {{repeatState}}
         </button>
-        <button class="material-symbols-outlined">
-          cast
+        <button class="material-symbols-outlined" @click="isShuffled =! isShuffled; console.log(isShuffled)" :style="isShuffled ? 'color: #2BD268;' : ''">
+          shuffle
         </button>
         <button class="material-symbols-outlined">
           more_vert
@@ -393,7 +435,7 @@ document.addEventListener('keyup', event => {
 
       .material-symbols-outlined {
         font-variation-settings:
-            'FILL' 1,
+            'FILL' 0,
             'wght' 400,
             'GRAD' 0,
             'opsz' 48
@@ -415,7 +457,12 @@ document.addEventListener('keyup', event => {
         margin-left: 35px;
         color: #858585;
 
+        &:hover {
+          color: #FFFFFF;
+        }
+
         &:last-child {
+          margin-right: 15px;
           color: #FFFFFF;
           font-variation-settings:
               'FILL' 0,

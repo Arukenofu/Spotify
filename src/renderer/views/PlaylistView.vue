@@ -1,7 +1,7 @@
 <script setup>
 import {musicStore} from "../stores/MusicStore";
 import {useMediaControls} from "@vueuse/core";
-import {computed, onBeforeMount, onMounted, onUnmounted, onUpdated, reactive, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import axios from "axios";
 import TopNav from "../components/TopNav.vue";
 import {useRoute} from "vue-router";
@@ -15,10 +15,6 @@ const colors = ref([])
 onMounted(async () => {
   playing.value = store.playing;
   isStoreAlbum() ? colors.value = (await axios.post('http://localhost:3000/color', {image: currentMusic.value.picture})).data : '';
-  console.log(store.albums[store.currentPlaylistId-1].musics === store.music)
-  console.log(store.music)
-  console.log()
-  console.log()
 })
 
 const audio = ref(document.getElementById('musicRoot'))
@@ -36,11 +32,7 @@ const filterByAmount = (value) => {
 
 
 const isStoreAlbum = () => {
-  if (store.currentPlaylistId) {
-    return store.albums[store.currentPlaylistId - 1].musics === store.music;
-  } else {
-    return false
-  }
+  return !!(store.currentPlaylistId || route.params.id);
 }
 
 const currentMusic = computed(() => {
@@ -86,7 +78,7 @@ console.log(currentAlbum.value)
           <div class="info">
             <div class="creator-avatar" v-if="isStoreAlbum()" />
             <h6>
-              {{isStoreAlbum() ? 'pansuman' : ''}}  <span> {{isStoreAlbum() ? currentMusic.tracksamount : store.music.length}} tracks</span> &nbsp;<span v-if="isStoreAlbum()">15 min. 51 sec.</span>
+              {{isStoreAlbum() ? ' pansuman' : ''}}  <span> {{isStoreAlbum() ? currentMusic.tracksamount : store.music.length}} tracks</span> &nbsp;<span v-if="isStoreAlbum()">15 min. 51 sec.</span>
             </h6>
           </div>
         </div>

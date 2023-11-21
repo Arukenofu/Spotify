@@ -5,10 +5,6 @@ import axios from "axios";
 
 const store = UserStore();
 
-onMounted(async () => {
-  store.users = await axios.get('http://localhost:3000/users')
-  console.log(store.users.data.rows);
-})
 </script>
 
 <template>
