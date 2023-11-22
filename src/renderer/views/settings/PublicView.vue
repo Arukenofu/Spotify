@@ -1,11 +1,27 @@
 <script setup>
-import {ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
+import axios from "axios";
 
 const user = ref({
-  email: localStorage.getItem('email'),
-  username: localStorage.getItem('username'),
-  avatar: localStorage.getItem('avatar')
+
 })
+const isLoaded = ref(false)
+onMounted(async () => {
+  const data = await axios.post('http://localhost:3000/user', {id: id.value}, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  });
+
+  user.value = data.data[0];
+  formData.value.name = user.value.username
+  formData.value.description = user.value.description;
+  formData.value.location = user.value.location
+  formData.value.gender = user.value.gender
+  isLoaded.value = true;
+})
+
+const id = ref(localStorage.getItem('id'))
 
 const preview = ref(null);
 
@@ -16,70 +32,110 @@ const previewImage = (event) => {
     let reader = new FileReader();
 
     reader.onload = (e) => {
-      preview.value = e.target.result;
+      formData.value.image = e.target.result;
       console.log(preview.value)
     }
     reader.readAsDataURL(input.files[0]);
   }
 }
 
+const formData = ref({
+  id: localStorage.getItem('id'),
+  name: '',
+  description: '',
+  gender: '',
+  location: '',
+  image: ''
+})
+
+
+const updateProfile = async () => {
+  const response = await axios.post('http://localhost:3000/update', formData.value, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })
+  localStorage.setItem("username", response.data.username);
+  console.log(localStorage.getItem('username'))
+  localStorage.setItem("avatar", response.data.avatar)
+}
+
 </script>
 
 <template>
-  <div class="content">
+  <div class="content" v-if="isLoaded">
 
     <h3>Public Profile</h3>
 
     <div class="options">
-      <div class="text-options">
 
-        <div class="form">
-          <label for="username">
-            Name
-          </label>
-          <input type="text" name="username" :placeholder="user.username">
+      <form @submit="updateProfile()">
+        <div class="text-options">
+
+          <div class="form">
+            <label for="username">
+              Name
+            </label>
+            <input type="text" name="username" v-model="formData.name">
+            <p>
+              Your nickname can be used for public communication and identification in the online environment,
+              as well as to create a unique virtual image or character.
+            </p>
+          </div>
+
+          <div class="form">
+            <label for="description">
+              Description
+            </label>
+            <textarea name="description" v-model="formData.description">
+
+            </textarea>
+            <p>
+              Profile description is brief information about you.
+              This is your online business card, helping other users better understand
+              who you are and what inspires you.
+            </p>
+          </div>
+
+          <div class="form">
+            <label for="gender">
+              Gender
+            </label>
+            <select name="gender" v-model="formData.gender">
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+
+          <div class="form">
+            <label for="location">
+              Location
+            </label>
+            <input placeholder="Your Country" type="text" name="location" v-model="formData.location">
+          </div>
+
+          <button type="submit">
+            Submit
+          </button>
         </div>
-
-        <div class="form">
-          <label for="description">
-            Description
-          </label>
-          <textarea name="description">
-
-          </textarea>
-        </div>
-
-        <div class="form">
-          <label for="gender">
-            Gender
-          </label>
-          <select name="gender">
-            <option>Male</option>
-            <option>Female</option>
-          </select>
-        </div>
-
-        <div class="form">
-          <label for="location">
-            Location
-          </label>
-          <input type="text" name="location">
-        </div>
-      </div>
+      </form>
 
       <div class="photo-options">
-        <p>
-          Profile Picture
-        </p>
-        <div class="avatar" :style="preview ? `background-image: url('${preview}')` : `background-image: url('${user.avatar}')`">
-          <div class="table">
-            <label class="input-file">
-              <input type="file" accept="image/*" @change="previewImage">
-              <span> <span class="material-symbols-outlined">photo_camera</span> Take a file...</span>
-            </label>
+          <p>
+            Profile Picture
+          </p>
+          <div class="avatar" :style="formData.image ? `background-image: url('${formData.image}')` : `background-image: url('${user.avatar}')`">
+            <div class="table">
+              <label class="input-file">
+                <input type="file" accept="image/png" @change="previewImage">
+                <span>
+                  <span class="material-symbols-outlined">photo_camera</span>
+                  Take a file...
+                </span>
+              </label>
+            </div>
           </div>
         </div>
-      </div>
     </div>
   </div>
 </template>
@@ -99,48 +155,76 @@ const previewImage = (event) => {
 
   .options {
     display: flex;
-    width: 100%;
+    gap: 15px;
 
-    .text-options {
-      width: 75%;
+    form {
+      flex: 7;
 
-      .form {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 20px;
+      button[type=submit] {
+        margin-top: 5px;
+        padding: 10px 27px;
+        background-color: #2BD268;
+        border: none;
+        border-radius: 4px;
 
-        input, select, textarea {
-          background-color: #1a1a1a;
-          border: none;
-          outline: 1px solid #2c2c2c;
-          width: 450px;
-          transition: 0.2s ease-in-out;
-          border-radius: 5px;
+        &:active {
+          opacity: 0.9;
+        }
+      }
 
-          &:focus {
-            outline: 2px solid #2BD268;
-            background-color: #2f2f2f;
+      .text-options {
+        width: 75%;
+
+        .form {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 12px;
+
+          input, select, textarea {
+            background-color: #1a1a1a;
+            border: none;
+            outline: 1px solid #2c2c2c;
+            width: 450px;
+            transition: 0.2s ease-in-out;
+            border-radius: 5px;
+            font-weight: 400;
+
+            &:focus {
+              outline: 2px solid #2BD268;
+              background-color: #2f2f2f;
+            }
           }
-        }
-        label {
-          margin-bottom: 5px;
-        }
+          label {
+            font-size: 1.05rem;
+            margin-bottom: 5px;
+          }
 
-        input {
-          padding: 10px;
-          height: 30px;
-        }
-        textarea {
-          padding: 5px 5px;
-          height: 70px;
-        }
-        select {
-          height: 30px;
+          p {
+            width: 450px;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #6d706d;
+            margin-top: 9px;
+          }
+
+          input {
+            padding: 10px;
+            height: 30px;
+          }
+          textarea {
+            padding: 10px 10px;
+            height: 70px;
+          }
+          select {
+            padding: 0 6px;
+            height: 30px;
+          }
         }
       }
     }
     .photo-options {
-      width: 30%;
+      flex: 3;
+      min-width: 250px;
 
       p {
         margin-top: 5px;

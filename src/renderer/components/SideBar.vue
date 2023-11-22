@@ -16,12 +16,12 @@ const audio = ref(document.getElementById('musicRoot'));
 
 const {playing} = useMediaControls(audio);
 
-// const changeMusic = (friendMusic) => {
-//   store.music = store.globalMusic;
-//   store.currentMusic = friendMusic.id;
-//   playing.value = true;
-// }
-//
+const changeMusic = (friendMusic) => {
+  store.music = store.globalMusic;
+  store.currentMusic = friendMusic;
+  playing.value = true;
+}
+
 const friends = computed(() => {
   return users
 })
@@ -43,7 +43,7 @@ const friends = computed(() => {
                 <div class="friend-pfp" :style="`background-image: url(${friend.avatar})`" />
                 <div class="friend-text">
                   <h2>{{friend.username}}</h2>
-                  <button @click="">
+                  <button @click="changeMusic(friend.hearing)">
                     {{store.globalMusic[friend.hearing].singer + ' - ' + store.globalMusic[friend.hearing].name}}
                   </button>
                 </div>

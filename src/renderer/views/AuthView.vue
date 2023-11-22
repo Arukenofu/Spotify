@@ -48,6 +48,7 @@ const LogIn = async () => {
   try {
     const response = await axios.post('http://localhost:3000/login', loginData)
     localStorage.setItem("token", response.data.token)
+    localStorage.setItem("id", response.data.id)
     localStorage.setItem("email", response.data.email)
     localStorage.setItem("username", response.data.username);
     localStorage.setItem("avatar", response.data.avatar)

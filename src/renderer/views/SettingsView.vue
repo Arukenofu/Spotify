@@ -26,7 +26,10 @@ const user = ref({
         <ul>
             <router-link to="/public">
               <li>
-                Public Page
+                <span class="material-symbols-outlined">
+                  person
+                </span>
+                Public profile
               </li>
             </router-link>
         </ul>
@@ -86,7 +89,11 @@ const user = ref({
     }
     .routes {
       ul {
-        list-style: none;
+        list-style-type: none;
+
+        a {
+          text-decoration: none;
+        }
 
         .router-link-active li {
           background-color: #0d0d0d;
@@ -96,15 +103,18 @@ const user = ref({
           display: flex;
           align-items: center;
           font-size: 0.9rem;
-          height: 35px;
+          height: 40px;
           border-radius: 3px;
+
+          span {
+            margin-left: 7px;
+            margin-right: 4px;
+            font-size: 1.3rem;
+            margin-bottom: 1px;
+          }
 
           &:hover {
             background-color: #1e1e1e;
-          }
-          a {
-            color: #FFFFFF;
-            text-decoration: none;
           }
         }
       }

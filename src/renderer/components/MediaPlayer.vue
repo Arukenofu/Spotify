@@ -2,6 +2,7 @@
 import {computed, onMounted, ref, watch} from "vue";
 import {useMediaControls} from '@vueuse/core'
 import {musicStore} from "../stores/MusicStore";
+import axios from "axios";
 
 const store = musicStore();
 
@@ -36,7 +37,7 @@ const audioDuration = computed(() => {
 
 const isShuffled = ref(false)
 
-const isRepeat = ref(0);
+const isRepeat = ref(1);
 
 const toggleRepeat = () => {
   if (isRepeat.value === 2) {
@@ -84,7 +85,7 @@ navigator.mediaSession.setActionHandler('nexttrack', () => {
 })
 
 watch(currentMusic,
-    () => {
+    async (value) => {
       useMediaControls(audio, {
         src: ref(currentAudio.value.song)
       });
@@ -104,6 +105,12 @@ watch(currentMusic,
       setTimeout(() => {
         playing.value = true;
       }, 30)
+
+      await axios.post('http://localhost:3000/updateMusic', {id: localStorage.getItem('id'), musicId: value}, {
+        headers: {
+          Authorization: `${localStorage.getItem('token')}`,
+        }
+      })
     }
 )
 
@@ -146,26 +153,13 @@ watch(() => store.music,
       });
       setTimeout(() => {
         playing.value = true
-      }, 10);
+      }, 10)
     },
     {deep: true})
 
 watch(audio, (value) => {
   store.audio = value;
 }, {deep: true})
-
-document.addEventListener('keyup', event => {
-  if (event.code === 'Enter') {
-    playing.value = !playing.value
-  }
-  if (event.code === 'ArrowLeft') {
-    DecrementMusicID();
-  }
-  if (event.code === 'ArrowRight') {
-    IncrementMusicID();
-  }
-})
-
 </script>
 
 <template>
