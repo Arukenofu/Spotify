@@ -24,14 +24,26 @@ const user = ref({
 
       <div class="routes">
         <ul>
-            <router-link to="/public">
-              <li>
+
+          <router-link to="/public">
+            <li>
+              <span class="material-symbols-outlined">
+                person
+              </span>
+              Public profile
+            </li>
+          </router-link>
+
+          <router-link to="/private">
+            <li>
                 <span class="material-symbols-outlined">
-                  person
+                  settings
                 </span>
-                Public profile
-              </li>
-            </router-link>
+              Private settings
+            </li>
+          </router-link>
+
+
         </ul>
       </div>
     </div>
@@ -41,9 +53,9 @@ const user = ref({
 
 <style scoped lang="scss">
 .container {
-  width: calc(100vw - 100px);
-  padding: 0 50px;
+  width: calc(100vw - 125px);
   margin-top: 25px;
+  padding: 0 30px;
   display: flex;
 
   .sidebar {
@@ -105,6 +117,7 @@ const user = ref({
           font-size: 0.9rem;
           height: 40px;
           border-radius: 3px;
+          margin-bottom: 5px;
 
           span {
             margin-left: 7px;

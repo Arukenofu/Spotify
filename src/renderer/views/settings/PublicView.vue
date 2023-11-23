@@ -17,7 +17,6 @@ onMounted(async () => {
   formData.value.name = user.value.username
   formData.value.description = user.value.description;
   formData.value.location = user.value.location
-  formData.value.gender = user.value.gender
   isLoaded.value = true;
 })
 
@@ -105,6 +104,9 @@ const updateProfile = async () => {
               <option>Male</option>
               <option>Female</option>
             </select>
+            <p>
+              There are only two genders in our politics.
+            </p>
           </div>
 
           <div class="form">
@@ -112,6 +114,9 @@ const updateProfile = async () => {
               Location
             </label>
             <input placeholder="Your Country" type="text" name="location" v-model="formData.location">
+            <p>
+              Your current country, location.
+            </p>
           </div>
 
           <button type="submit">
@@ -121,9 +126,9 @@ const updateProfile = async () => {
       </form>
 
       <div class="photo-options">
-          <p>
+          <h2>
             Profile Picture
-          </p>
+          </h2>
           <div class="avatar" :style="formData.image ? `background-image: url('${formData.image}')` : `background-image: url('${user.avatar}')`">
             <div class="table">
               <label class="input-file">
@@ -226,7 +231,7 @@ const updateProfile = async () => {
       flex: 3;
       min-width: 250px;
 
-      p {
+      h2 {
         margin-top: 5px;
         font-size: .9rem;
       }
@@ -292,6 +297,13 @@ const updateProfile = async () => {
           width: 0;
           height: 0;
         }
+      }
+
+      p {
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: #6d706d;
+        margin-top: 9px;
       }
     }
   }
