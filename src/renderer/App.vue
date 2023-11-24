@@ -16,6 +16,7 @@ onMounted(async () => {
   await store.checkToken();
   await store.fetchGlobalMusic();
   await store.fetchMainAlbums();
+
   UserStore().users = (await axios.get('http://localhost:3000/users')).data.rows
   isLoading.value = true;
   store.recentlyPlayed = JSON.parse(localStorage.getItem('last'));

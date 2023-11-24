@@ -1,5 +1,38 @@
 <script setup>
+import {reactive, ref} from "vue";
+import axios from "axios";
+import router from "../../router";
 
+const isModal = ref(false)
+const confirmValue = ref('')
+
+const formData = reactive({
+  id: localStorage.getItem('id'),
+  email: '',
+  password: '',
+})
+
+const errors = ref('')
+
+const deleteProfile = async () => {
+  try {
+    const res = await axios.post('http://localhost:3000/deleteAccount',
+        formData,
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('token')}`,
+          }
+        }
+    )
+    if (res.data.message === 'Account deleted.') {
+      localStorage.clear();
+      router.push('/auth');
+    }
+  } catch (e) {
+    console.error(e?.response?.data)
+    errors.value = e.response.data.message;
+  }
+}
 </script>
 
 <template>
@@ -35,7 +68,7 @@
         Changing your email will have unintended side effects
       </p>
       <button>
-        Change username
+        Change email
       </button>
     </section>
 
@@ -58,11 +91,56 @@
       <p>
         Once you delete your account, there is no back to restore your account.
       </p>
-      <button>
-        Change username
+      <button @click="isModal = true">
+        Delete account
       </button>
     </section>
   </div>
+
+  <teleport to="body">
+    <div class="modal-bg" v-if="isModal">
+      <div class="modal">
+        <div class="overlay-header">
+          <h3>
+            Are you really sure to do this?
+          </h3>
+          <button class="material-symbols-outlined" @click="isModal = false">
+            close
+          </button>
+        </div>
+        <div class="warning">
+          You can no longer restore your account after finish this.
+        </div>
+
+        <label for="email">
+          Email
+        </label>
+        <input type="text" v-model="formData.email">
+
+        <label for="password">
+          Password
+        </label>
+        <input type="password" v-model="formData.password">
+
+        <label>
+          Type "ICONFIRM"
+        </label>
+        <input type="text" v-model="confirmValue">
+
+        <span>
+          {{errors}}
+        </span>
+
+        <button
+            :disabled="confirmValue !== 'ICONFIRM'"
+            :class="confirmValue !== 'ICONFIRM' ? 'disabled' : ''"
+            @click="deleteProfile()"
+        >
+          Delete my account
+        </button>
+      </div>
+    </div>
+  </teleport>
 </template>
 
 <style scoped lang="scss">
@@ -90,7 +168,7 @@
     & > p {
       font-size: 0.9rem;
       font-weight: 400;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
     & > button {
@@ -148,6 +226,108 @@
       &:active {
         outline: 1px solid #ff2929;
       }
+    }
+  }
+}
+
+.modal-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  top: 0;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  background-color: rgb(1,1,1, 0.8);
+
+  .modal {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+    width: 460px;
+    min-height: 370px;
+    border-radius: 7px;
+    background-color: #090909;
+    border: 1px solid #2E2E2C;
+
+    .overlay-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+
+      h3 {
+        font-size: 1rem;
+      }
+
+      button {
+        font-size: 1.1rem;
+        padding: 5px;
+        background: none;
+        border-radius: 2px;
+        border: none;
+
+        &:hover {
+          background-color: #2E2E2C;
+        }
+      }
+    }
+
+    .warning {
+      background-color: rgba(255,41,41, 0.2);
+      border: #9f1919 1.5px solid;
+      padding: 21px 10px;
+      border-radius: 3px;
+      font-size: .8rem;
+      font-weight: 300;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    label {
+      user-select: none;
+      font-size: .9rem;
+      margin-bottom: 8px;
+    }
+
+    input {
+      background-color: #1a1a1a;
+      border: none;
+      outline: 1px solid #2c2c2c;
+      transition: 0.2s ease-in-out;
+      border-radius: 3px;
+      font-weight: 400;
+      padding: 7px 10px;
+      margin-bottom: 15px;
+
+      &:focus {
+        outline: 1px solid #ff2929;
+        background-color: #2f2f2f;
+      }
+    }
+
+    span {
+      font-size: .9rem;
+      color: #ff2929;
+      margin-bottom: 3px;
+    }
+
+    button {
+      margin-top: 7px;
+      padding: 10px 0;
+      border-radius: 3px;
+      border: 1px solid #1a1a1a;
+      background-color: #1a1a1a;
+      transition: 0.7s;
+
+      &:active {
+        border: 1px solid #ff0000;
+      }
+    }
+
+    .disabled {
+      opacity: 0.4;
     }
   }
 }

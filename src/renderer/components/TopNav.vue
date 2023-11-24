@@ -1,6 +1,10 @@
 <script setup>
-
 import router from "../router";
+import {ref} from "vue";
+
+const avatar = ref(localStorage.getItem('avatar'))
+
+
 </script>
 
 <template>
@@ -15,7 +19,7 @@ import router from "../router";
             notifications
           </span>
       </div>
-      <div class="user">
+      <div class="user" :style="`background-image: url('${avatar}')`">
 
       </div>
     </div>
@@ -70,7 +74,6 @@ import router from "../router";
 
     .user {
       cursor: pointer;
-      background-image: url("https://www.datocms-assets.com/55010/1631448986-1609827492810345-modelo.jpg?auto=format&fit=max&w=1200");
       background-position: center;
       background-size: cover;
       height: 35px;

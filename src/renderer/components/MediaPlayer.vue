@@ -71,8 +71,8 @@ const IncrementMusicID = () => {
   store.currentMusic !== store.music.length-1 ? store.currentMusic++ : ''
 }
 
-onMounted( async () => {
-  volume.value = 1;
+onMounted(() => {
+  volume.value = 0.2;
   audioVolume.value = volume.value * 100;
 })
 
@@ -85,10 +85,16 @@ navigator.mediaSession.setActionHandler('nexttrack', () => {
 })
 
 watch(currentMusic,
-    async (value) => {
+      async (value) => {
       useMediaControls(audio, {
         src: ref(currentAudio.value.song)
       });
+
+        await axios.post('http://localhost:3000/updateMusic', {id: localStorage.getItem('id'), musicId: value}, {
+          headers: {
+            Authorization: `${localStorage.getItem('token')}`,
+          }
+        })
 
       navigator.mediaSession.metadata = new MediaMetadata({
         title: currentAudio.value.name,
@@ -104,13 +110,7 @@ watch(currentMusic,
 
       setTimeout(() => {
         playing.value = true;
-      }, 30)
-
-      await axios.post('http://localhost:3000/updateMusic', {id: localStorage.getItem('id'), musicId: value}, {
-        headers: {
-          Authorization: `${localStorage.getItem('token')}`,
-        }
-      })
+      }, 10)
     }
 )
 
@@ -122,7 +122,7 @@ watch(currentTime,
 
           setTimeout(() => {
             playing.value = true
-          }, 100)
+          }, 10)
 
           return;
         }
@@ -141,8 +141,8 @@ watch(currentTime,
     }
 )
 
-watch(() => store.music,
-    (value, oldValue) => {
+watch( () => store.music,
+     (value, oldValue) => {
       const isReplacingArray = value !== oldValue;
       if (!isReplacingArray) {
         return;
@@ -151,15 +151,16 @@ watch(() => store.music,
       useMediaControls(audio, {
         src: ref(currentAudio.value.song)
       });
+
       setTimeout(() => {
         playing.value = true
       }, 10)
     },
     {deep: true})
-
-watch(audio, (value) => {
-  store.audio = value;
-}, {deep: true})
+//
+// watch(audio, (value) => {
+//   store.audio = value;
+// }, {deep: true})
 </script>
 
 <template>

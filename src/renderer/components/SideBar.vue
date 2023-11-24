@@ -43,8 +43,11 @@ const friends = computed(() => {
                 <div class="friend-pfp" :style="`background-image: url(${friend.avatar})`" />
                 <div class="friend-text">
                   <h2>{{friend.username}}</h2>
-                  <button @click="changeMusic(friend.hearing)">
+                  <button v-if="friend.hearing" @click="changeMusic(friend.hearing)">
                     {{store.globalMusic[friend.hearing].singer + ' - ' + store.globalMusic[friend.hearing].name}}
+                  </button>
+                  <button v-else>
+                    No data
                   </button>
                 </div>
               </div>

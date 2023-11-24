@@ -12,27 +12,9 @@ const logout = async() => {
 const username = ref(localStorage.getItem('username'))
 const avatar = ref(localStorage.getItem('avatar'))
 
-// const setAvatar = async () => {
-//   await axios.post('http://localhost:3000/avatar', {id: 326, image: preview.value});
-// }
-
-// const isModalActive = ref(true);
-//
 const preview = ref(null);
 
-const previewImage = (event) => {
-  const input = event.target;
 
-  if (input.files) {
-    let reader = new FileReader();
-
-    reader.onload = (e) => {
-      preview.value = e.target.result;
-      console.log(preview.value)
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
 
 </script>
 
@@ -46,7 +28,7 @@ const previewImage = (event) => {
 
       <input type="text" placeholder="Search..." v-model="value" @input="$emit('event', value)" id="inputRoot" />
 
-      <div class='spacer-box'></div>
+      <div class='spacer-box' />
 
 
 
@@ -73,7 +55,7 @@ const previewImage = (event) => {
       </div>
 
       <div class="account">
-        <div class="user-profile" :style="`background: ${avatar}`" @click="logout()" />
+        <div class="user-profile" :style="`background-image: url('${avatar}')`" @click="logout()" />
       </div>
 
     </div>
