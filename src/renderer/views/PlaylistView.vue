@@ -55,9 +55,6 @@ const checkParams = () => {
     store.currentPlaylistId = route.params.id+1
   }
 }
-
-console.log(currentAlbum.value)
-
 </script>
 
 <template>
@@ -84,7 +81,6 @@ console.log(currentAlbum.value)
         </div>
       </div>
     </div>
-    {{}}
     <div class="music-list">
         <div class="album-headers">
           <div class="nums">
@@ -114,7 +110,7 @@ console.log(currentAlbum.value)
             <div class="name">
               <div class="artist" :style="`background-image: url('${album.image}')`" />
               <div class="text">
-                <h4 :style="album.name === store.music[store.currentMusic].name ? 'color: #2BD268;' : '' ">{{album.name}}</h4>
+                <h4 :style="album.name === store.music[store.currentMusic].name ? 'color: var(--main);' : '' ">{{album.name}}</h4>
                 <p>{{album.singer}}</p>
               </div>
             </div>
@@ -337,7 +333,7 @@ console.log(currentAlbum.value)
             font-weight: 600;
           }
           .text-active {
-            background-color: rgb(43, 210, 104);
+            background-color: var(--main);
           }
           p {
             font-size: 0.8rem;

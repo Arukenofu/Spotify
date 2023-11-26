@@ -10,6 +10,7 @@ import SettingsView from "../views/SettingsView.vue";
 import AccountView from "../views/AccountView.vue";
 import PublicView from "../views/settings/PublicView.vue";
 import PrivateView from "../views/settings/PrivateView.vue";
+import AppearanceView from "../views/settings/AppearanceView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -71,6 +72,11 @@ const router = createRouter({
           path: '/private',
           name: 'Private',
           component: PrivateView,
+        },
+        {
+          path: '/Appearance',
+          name: 'Appearance',
+          component: AppearanceView,
         }
       ],
       component: SettingsView

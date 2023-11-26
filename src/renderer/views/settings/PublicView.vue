@@ -168,7 +168,7 @@ const updateProfile = async () => {
       button[type=submit] {
         margin-top: 5px;
         padding: 10px 27px;
-        background-color: #2BD268;
+        background-color: var(--main);
         border: none;
         border-radius: 4px;
 
@@ -195,7 +195,7 @@ const updateProfile = async () => {
             font-weight: 400;
 
             &:focus {
-              outline: 2px solid #2BD268;
+              outline: 2px solid var(--main);
               background-color: #2f2f2f;
             }
           }

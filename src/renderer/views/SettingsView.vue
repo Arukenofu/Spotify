@@ -43,6 +43,15 @@ const user = ref({
             </li>
           </router-link>
 
+          <router-link to="/appearance">
+            <li>
+                <span class="material-symbols-outlined">
+                  brush
+                </span>
+              Appearance
+            </li>
+          </router-link>
+
 
         </ul>
       </div>
@@ -117,7 +126,7 @@ const user = ref({
           font-size: 0.9rem;
           height: 40px;
           border-radius: 3px;
-          margin-bottom: 5px;
+          margin-bottom: 3px;
 
           span {
             margin-left: 7px;

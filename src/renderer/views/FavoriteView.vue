@@ -211,7 +211,7 @@ const togglePlayArrowById = (el) => {
         .arrow {
           margin-left: auto;
           margin-right: 18px;
-          background-color: #2BD268;
+          background-color: var(--main);
           box-shadow: 0px 13px 15px -5px rgb(0, 0, 0, 0.4);
           color: #000000;
           padding: 8px;
@@ -265,7 +265,7 @@ const togglePlayArrowById = (el) => {
           button {
             opacity: 0;
             position: absolute;
-            background-color: rgb(43, 210, 104);
+            background-color: var(--main);
             border-radius: 50%;
             border: none;
             bottom: 12px;
@@ -304,10 +304,10 @@ const togglePlayArrowById = (el) => {
       }
 
       .active {
-        background-color: #2BD268;
+        background-color: var(--main);
 
         &:hover {
-          background-color: #2BD268;
+          background-color: var(--main);
         }
 
         .music-picture button {
@@ -362,7 +362,7 @@ const togglePlayArrowById = (el) => {
           button {
             opacity: 0;
             position: absolute;
-            background-color: rgb(43, 210, 104);
+            background-color: var(--main);
             border-radius: 50%;
             border: none;
             bottom: 12px;
@@ -401,10 +401,10 @@ const togglePlayArrowById = (el) => {
       }
 
       .active {
-        background-color: #2BD268;
+        background-color: var(--main);
 
         &:hover {
-          background-color: #2BD268;
+          background-color: var(--main);
         }
 
         .music-picture button {

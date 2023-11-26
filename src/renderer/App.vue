@@ -17,6 +17,10 @@ onMounted(async () => {
   await store.fetchGlobalMusic();
   await store.fetchMainAlbums();
 
+  const root = document.documentElement;
+  root.style.setProperty('--main', localStorage.getItem('theme'))
+
+
   UserStore().users = (await axios.get('http://localhost:3000/users')).data.rows
   isLoading.value = true;
   store.recentlyPlayed = JSON.parse(localStorage.getItem('last'));
@@ -41,6 +45,9 @@ watch(route, () => {
 </template>
 
 <style lang="scss">
+body {
+  background-color: #000000;
+}
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 button {
   cursor: pointer;

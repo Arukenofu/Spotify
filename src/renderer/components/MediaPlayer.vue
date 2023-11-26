@@ -199,7 +199,7 @@ watch( () => store.music,
           <span class="music-current-duration">
             {{currentAudioTime}}
           </span>
-        <input type="range" :max="duration" min="0" v-model="currentTime" >
+        <input type="range" :max="duration" min="0" v-model="currentTime">
         <span class="music-duration">
             {{audioDuration}}
           </span>
@@ -213,13 +213,13 @@ watch( () => store.music,
       </div>
 
       <div class="options">
-        <button class="material-symbols-outlined" :style="isLiked() ? 'color: #2BD268;' : ''">
+        <button class="material-symbols-outlined" :style="isLiked() ? 'color: var(--main);' : ''">
           favorite
         </button>
-        <button class="material-symbols-outlined" @click="toggleRepeat()" :style="isRepeat ? 'color: #2BD268;' : ''">
+        <button class="material-symbols-outlined" @click="toggleRepeat()" :style="isRepeat ? 'color: var(--main);' : ''">
           {{repeatState}}
         </button>
-        <button class="material-symbols-outlined" @click="isShuffled =! isShuffled; console.log(isShuffled)" :style="isShuffled ? 'color: #2BD268;' : ''">
+        <button class="material-symbols-outlined" @click="isShuffled =! isShuffled" :style="isShuffled ? 'color: var(--main);' : ''">
           shuffle
         </button>
         <button class="material-symbols-outlined">
@@ -350,7 +350,7 @@ watch( () => store.music,
         }
         &::-moz-range-progress {
           height: 100%;
-          background-color: #2BD268;
+          background-color: var(--main);
           border-radius: 3px;
         }
 
@@ -362,8 +362,8 @@ watch( () => store.music,
 
         &::-webkit-slider-thumb {
           -webkit-appearance: none;
-          color: #2BD268;
-          background: #2BD268;
+          color: var(--main);
+          background: var(--main);
           margin-top: calc(2px / 2 - 12px / 2);
           height: 14px;
           width: 14px;
@@ -403,7 +403,7 @@ watch( () => store.music,
         }
         &::-moz-range-progress {
           height: 100%;
-          background-color: #2BD268;
+          background-color: var(--main);
           border-radius: 3px;
         }
         &::-webkit-slider-runnable-track {
@@ -414,8 +414,8 @@ watch( () => store.music,
 
         &::-webkit-slider-thumb {
           -webkit-appearance: none;
-          color: #2BD268;
-          background: #2BD268;
+          color: var(--main);
+          background: var(--main);
           margin-top: calc(2px / 2 - 12px / 2);
           height: 14px;
           width: 14px;

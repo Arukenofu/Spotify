@@ -25,6 +25,9 @@ const changeMusic = (friendMusic) => {
 const friends = computed(() => {
   return users
 })
+//
+// console.log(store.globalMusic[friend.hearing])
+// console.log()
 </script>
 
 <template>
@@ -43,7 +46,10 @@ const friends = computed(() => {
                 <div class="friend-pfp" :style="`background-image: url(${friend.avatar})`" />
                 <div class="friend-text">
                   <h2>{{friend.username}}</h2>
-                  <button v-if="friend.hearing" @click="changeMusic(friend.hearing)">
+                  <button v-if="store.globalMusic[friend.hearing]"
+                          @click="changeMusic(friend.hearing)"
+                          :style="store.globalMusic[friend.hearing].name === store.music[store.currentMusic].name ? 'color: var(--main)' : ''"
+                  >
                     {{store.globalMusic[friend.hearing].singer + ' - ' + store.globalMusic[friend.hearing].name}}
                   </button>
                   <button v-else>

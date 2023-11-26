@@ -115,7 +115,7 @@ const changeTo = (track) => {
                 </div>
               </div>
               <div class="music-info" @click="changeTo(track)">
-                <h6 :style="store.music[store.currentMusic].name === track.name ? 'color: #2BD268;' : 'color: white'">
+                <h6 :style="store.music[store.currentMusic].name === track.name ? 'color: var(--main);' : 'color: white'">
                   {{track.name}}
                 </h6>
                 <p>{{track.singer}}</p>
@@ -256,15 +256,15 @@ const changeTo = (track) => {
             .play {
               opacity: 1;
               transform: translateY(0px);
-              background-color: #2BD268;
+              background-color: var(--main);
             }
           }
         }
         .best-music-block-active {
-          background-color: #2BD268;
+          background-color: var(--main);
 
           &:hover {
-            background-color: #34cb6b;
+            background-color: var(--main);
 
             .play {
               opacity: 1;
@@ -424,7 +424,7 @@ const changeTo = (track) => {
             button {
               opacity: 0;
               position: absolute;
-              background-color: rgb(43, 210, 104);
+              background-color: var(--main);
               border-radius: 50%;
               border: none;
               bottom: 12px;
@@ -436,7 +436,7 @@ const changeTo = (track) => {
               transform: translateY(5px);
 
               &:hover {
-                background-color: rgb(42, 217, 106);
+                background-color: var(--main);
                 padding: 11px;
               }
             }
