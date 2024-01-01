@@ -16,12 +16,13 @@ onMounted(async () => {
   await store.checkToken();
   await store.fetchGlobalMusic();
   await store.fetchMainAlbums();
+  console.log(store.albums)
 
   const root = document.documentElement;
   root.style.setProperty('--main', localStorage.getItem('theme'))
 
+  UserStore().users = (await axios.get('http://localhost:3000/users')).data;
 
-  UserStore().users = (await axios.get('http://localhost:3000/users')).data.rows
   isLoading.value = true;
   store.recentlyPlayed = JSON.parse(localStorage.getItem('last'));
 })

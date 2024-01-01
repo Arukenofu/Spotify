@@ -4,6 +4,7 @@
   "description": "A minimal Electron + Vue application",
   "main": "build/main/main.js",
   "scripts": {
+    "server": "cd ../Spotify-Backend/ && npm run dev",
     "dev": "node scripts/dev-server.js",
     "build": "node scripts/build.js && electron-builder",
     "build:win": "node scripts/build.js && electron-builder --win",
@@ -27,6 +28,7 @@
     "vite": "^4.1.1"
   },
   "dependencies": {
+    "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^10.5.0",
     "@vueuse/sound": "^2.0.1",
     "axios": "^1.5.1",

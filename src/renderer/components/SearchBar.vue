@@ -5,16 +5,10 @@ import axios from "axios";
 const value = ref('')
 
 const logout = async() => {
-  localStorage.removeItem('token');
-  await router.push('/auth')
+  await router.push('/user')
 }
 
-const username = ref(localStorage.getItem('username'))
 const avatar = ref(localStorage.getItem('avatar'))
-
-const preview = ref(null);
-
-
 
 </script>
 

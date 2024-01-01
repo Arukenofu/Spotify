@@ -1,9 +1,7 @@
 <script setup>
-import {onMounted} from "vue";
-import {UserStore} from "../stores/UserStore";
-import axios from "axios";
+import {ref} from "vue";
 
-const store = UserStore();
+const a = ref(10);
 
 </script>
 
@@ -11,6 +9,6 @@ const store = UserStore();
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 
 </style>

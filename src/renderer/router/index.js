@@ -51,18 +51,20 @@ const router = createRouter({
       component: AuthView
     },
     {
+      name: 'user',
       path: '/user',
       component: AccountView
     },
     {
+      name: 'users',
       path: '/user/:id',
       component: AccountView
     },
     {
       path: '/settings/',
       redirect: '/public',
-      children:
-      [
+      component: SettingsView,
+      children: [
         {
           path: '/public',
           name: 'Public Profile',
@@ -79,7 +81,6 @@ const router = createRouter({
           component: AppearanceView,
         }
       ],
-      component: SettingsView
     }
   ],
   scrollBehavior() {

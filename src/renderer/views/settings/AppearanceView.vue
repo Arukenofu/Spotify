@@ -30,9 +30,9 @@ const themes = [
   {
     id: 6,
     description: 'Pearl Frost',
-    color: '#A1D0FFFF'
+    color: '#d1e9ff'
   },
-]
+];
 
 const currentTheme = localStorage.getItem('theme');
 

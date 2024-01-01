@@ -71,8 +71,7 @@ const IncrementMusicID = () => {
   store.currentMusic !== store.music.length-1 ? store.currentMusic++ : ''
 }
 
-onMounted(() => {
-  volume.value = 0.2;
+onMounted( () => {
   audioVolume.value = volume.value * 100;
 })
 
@@ -157,10 +156,10 @@ watch( () => store.music,
       }, 10)
     },
     {deep: true})
-//
-// watch(audio, (value) => {
-//   store.audio = value;
-// }, {deep: true})
+
+watch(audio, (value) => {
+  store.audio = value;
+}, {deep: true})
 </script>
 
 <template>
@@ -352,6 +351,10 @@ watch( () => store.music,
           height: 100%;
           background-color: var(--main);
           border-radius: 3px;
+        }
+
+        &::-webkit-progress-value {
+          background-color: #d9ad5d;
         }
 
         &::-webkit-slider-runnable-track {
