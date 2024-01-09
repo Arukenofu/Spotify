@@ -3,13 +3,22 @@ import TopNav from "../components/TopNav.vue";
 import {onMounted, ref} from "vue";
 import {useMediaControls} from "@vueuse/core";
 import {musicStore} from "../stores/MusicStore";
+import axios from "axios";
 
 const store = musicStore();
 const audio = ref(document.getElementById('musicRoot'))
+const isLoaded = ref(false);
+const favorites = ref();
 const {playing} = useMediaControls(audio);
 
-onMounted(() => {
+onMounted(async () => {
   playing.value = store.playing;
+
+  favorites.value = (await axios.post('http://localhost:3000/getFavorites', {
+    userID: localStorage.getItem('id')
+  })).data;
+
+  isLoaded.value = true
 })
 
 const togglePlayArrowById = (el) => {
@@ -25,9 +34,9 @@ const togglePlayArrowById = (el) => {
 <template>
   <top-nav class="nav"/>
   <div class="frame">
-    <div class="favorite-music">
+    <div class="favorite-music" v-if="isLoaded">
       <div class="music"
-           v-for="(music, index) in store.music"
+           v-for="(music, index) in favorites"
            :class="playing ?
                store.music[store.currentMusic].name === music.name ? 'active' : '' : ''"
       >
@@ -35,6 +44,7 @@ const togglePlayArrowById = (el) => {
           <button
               class="material-symbols-outlined"
               @click="
+                    store.music = favorites;
                     store.currentMusic = index;
                     playing = !playing
                   "

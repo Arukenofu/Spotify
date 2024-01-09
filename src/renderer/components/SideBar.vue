@@ -25,9 +25,6 @@ const changeMusic = (friendMusic) => {
 const friends = computed(() => {
   return users
 })
-//
-// console.log(store.globalMusic[friend.hearing])
-// console.log()
 </script>
 
 <template>
@@ -35,7 +32,7 @@ const friends = computed(() => {
     <transition name="toggle">
       <div class="friend-activity">
         <div class="sidebar-header">
-          <h2>Friends Activity</h2>
+          <h2>Subscription Activity</h2>
           <span class="material-symbols-outlined">
             view_cozy
           </span>
@@ -43,7 +40,7 @@ const friends = computed(() => {
         <keep-alive>
           <div class="friends-activity-wrap" :class="isOpened ? 'friend-activity-active' : 'friend-activity-inactive'">
               <div class="friend" v-if="users" v-for="friend in friends" :key="friend.id">
-                <div class="friend-pfp" :style="`background-image: url(${friend.avatar})`" />
+                <div class="friend-pfp" @click="$router.push(`/user/${friend.id}`)" :style="`background-image: url(${friend.avatar})`" />
                 <div class="friend-text">
                   <h2>{{friend.username}}</h2>
                   <button v-if="store.globalMusic[friend.hearing]"
@@ -135,6 +132,7 @@ aside {
           border-radius: 45px;
           height: 100%;
           aspect-ratio: 1/1;
+          cursor: pointer;
         }
 
         .friend-text {

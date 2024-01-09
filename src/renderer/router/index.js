@@ -3,11 +3,10 @@ import HomeView from '../views/HomeView.vue'
 import SearchView from "../views/SearchView.vue";
 import FavoriteView from "../views/FavoriteView.vue";
 import PlaylistView from "../views/PlaylistView.vue";
-import TracksView from "../views/TracksView.vue";
+import UserView from "../views/UserView.vue";
 import AuthView from "../views/AuthView.vue";
 import FavoriteMusics from "../views/FavoriteMusics.vue";
 import SettingsView from "../views/SettingsView.vue";
-import AccountView from "../views/AccountView.vue";
 import PublicView from "../views/settings/PublicView.vue";
 import PrivateView from "../views/settings/PrivateView.vue";
 import AppearanceView from "../views/settings/AppearanceView.vue";
@@ -41,24 +40,14 @@ const router = createRouter({
       component: PlaylistView
     },
     {
-      path: '/tracks',
-      name: 'Tracks',
-      component: TracksView
+      path: '/user/:id?',
+      name: 'User',
+      component: UserView
     },
     {
       path: '/auth',
       name: 'Authentication',
       component: AuthView
-    },
-    {
-      name: 'user',
-      path: '/user',
-      component: AccountView
-    },
-    {
-      name: 'users',
-      path: '/user/:id',
-      component: AccountView
     },
     {
       path: '/settings/',

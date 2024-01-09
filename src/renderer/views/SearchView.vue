@@ -2,8 +2,9 @@
 import SearchBar from "../components/SearchBar.vue";
 import SideBar from "../components/SideBar.vue";
 import {musicStore} from "../stores/MusicStore";
-import {computed, onMounted, ref  } from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {useMediaControls} from "@vueuse/core/index";
+import axios from "axios";
 
 const store = musicStore();
 const {globalMusic, albums} = store;
@@ -64,8 +65,24 @@ const addToCurrentPlaylist = (el) => {
 const changeTo = (track) => {
   store.music = globalMusic;
   store.currentMusic = track.id-1;
-  playing.value = !playing.value
+  playing.value = !playing.value;
+  store.currentPlaylistId = null;
 }
+
+const users = ref([
+
+])
+
+watch(search, async () => {
+  users.value = (await axios.post('http://localhost:3000/search', {
+    value: search.value,
+    id: localStorage.getItem('id')
+  },{
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  }))?.data;
+})
 
 </script>
 
@@ -73,7 +90,7 @@ const changeTo = (track) => {
   <search-bar @event="changeSearch"/>
   <div class="content">
     <div class="search-field">
-      <div class="tracks">
+      <div class="tracks" v-if="bestTrack.length">
         <div class="best-track">
           <h2>Best Track</h2>
           <div
@@ -85,10 +102,10 @@ const changeTo = (track) => {
           >
             <div class="avatar" :style="`background-image: url('${bestTrack[0].image}')`" />
             <h3 class="music-name">{{bestTrack[0].name}}
-              <div class="play material-symbols-rounded" @click="
-              store.music = globalMusic;
-              store.currentMusic = bestTrack[0].id-1;
-              playing = !playing"
+              <div class="play material-symbols-rounded"
+                   @click="store.music = globalMusic;
+                      store.currentMusic = bestTrack[0].id-1;
+                      playing = !playing; store.currentPlaylistId = null;"
               >
                 {{togglePlayArrowById(bestTrack[0])}}
               </div>
@@ -137,7 +154,7 @@ const changeTo = (track) => {
           </div>
         </div>
       </div>
-      <div class="albums-section">
+      <div class="albums-section" v-if="findAlbumBySearch.length">
         <h2>Albums</h2>
         <div class="albums-wrap">
           <div class="album" v-for="album in findAlbumBySearch" :key="album.id">
@@ -156,6 +173,18 @@ const changeTo = (track) => {
             </div>
             <h3>{{album.name}}</h3>
             <p>{{album.description}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="albums-section" v-if="users.length">
+        <h2>Users</h2>
+        <div class="albums-wrap">
+          <div class="album" v-for="user in users" :key="user.id" @click="$router.push(`/user/${user.id}`)">
+            <div class="picture" :style="`background-image: url('${user.avatar}')`">
+            </div>
+            <h3>{{user.username}}</h3>
+            <p>{{user.description}}</p>
           </div>
         </div>
       </div>
@@ -385,6 +414,7 @@ const changeTo = (track) => {
         }
       }
     }
+
     .albums-section {
       margin-top: 36px;
 
@@ -440,6 +470,16 @@ const changeTo = (track) => {
                 padding: 11px;
               }
             }
+          }
+
+          .picture {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            background-size: cover;
+            background-position: center;
           }
           h3 {
             font-size: 1.5rem;

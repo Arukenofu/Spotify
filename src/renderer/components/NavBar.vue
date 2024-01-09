@@ -34,9 +34,9 @@
       </span>
     </router-link>
 
-    <router-link to="/tracks">
+    <router-link to="/user">
       <span class="material-symbols-rounded">
-        music_note
+        person
       </span>
     </router-link>
 

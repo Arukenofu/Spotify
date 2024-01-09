@@ -46,7 +46,7 @@ const changeStyle = (theme) => {
   console.log(currentChoose.value);
 }
 
-const currentChoose = ref(themes.find((element) => element.color === currentTheme).id)
+const currentChoose = ref(themes.find((element) => element.color === currentTheme)?.id)
 </script>
 
 <template>

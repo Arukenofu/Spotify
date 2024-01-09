@@ -54,10 +54,6 @@ const repeatState = computed(() => {
   }
 })
 
-const isLiked = () => {
-  return false
-}
-
 
 const DecrementMusicID = () => {
   store.currentMusic !== 0 ? store.currentMusic-- : '';
@@ -69,6 +65,34 @@ const TogglePlayingValue = () => {
 
 const IncrementMusicID = () => {
   store.currentMusic !== store.music.length-1 ? store.currentMusic++ : ''
+}
+
+const changeFavorites = async () => {
+  if (isLiked.value === false) {
+    await axios.post('http://localhost:3000/addFavorite', {
+      userId: localStorage.getItem('id'),
+      musicId: currentMusic.value+1
+    },{
+      headers: {
+        Authorization: `${localStorage.getItem('token')}`,
+      }
+    })
+
+    isLiked.value = true;
+
+    return;
+  }
+
+  await axios.post('http://localhost:3000/deleteFavorite', {
+    userId: localStorage.getItem('id'),
+    musicId: currentMusic.value+1
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  });
+
+  isLiked.value = false;
 }
 
 onMounted( () => {
@@ -83,17 +107,33 @@ navigator.mediaSession.setActionHandler('nexttrack', () => {
   IncrementMusicID();
 })
 
+const isLiked = ref();
+
 watch(currentMusic,
       async (value) => {
       useMediaControls(audio, {
         src: ref(currentAudio.value.song)
       });
 
-        await axios.post('http://localhost:3000/updateMusic', {id: localStorage.getItem('id'), musicId: value}, {
+        await axios.post('http://localhost:3000/updateMusic', {
+          id: localStorage.getItem('id'),
+          musicId: value
+        }, {
           headers: {
             Authorization: `${localStorage.getItem('token')}`,
           }
         })
+
+        isLiked.value = (await axios.post('http://localhost:3000/isLiked', {
+          musicId: value+1,
+          userId: Number(localStorage.getItem('id'))
+        }, {
+          headers: {
+            Authorization: `${localStorage.getItem('token')}`,
+          }
+        })).data
+
+        console.log(isLiked.value);
 
       navigator.mediaSession.metadata = new MediaMetadata({
         title: currentAudio.value.name,
@@ -212,7 +252,7 @@ watch(audio, (value) => {
       </div>
 
       <div class="options">
-        <button class="material-symbols-outlined" :style="isLiked() ? 'color: var(--main);' : ''">
+        <button class="material-symbols-outlined" @click="changeFavorites()" :style="isLiked ? 'color: var(--main);' : ''">
           favorite
         </button>
         <button class="material-symbols-outlined" @click="toggleRepeat()" :style="isRepeat ? 'color: var(--main);' : ''">

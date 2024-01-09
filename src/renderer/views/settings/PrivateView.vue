@@ -1,7 +1,24 @@
 <script setup>
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import axios from "axios";
 import router from "../../router";
+
+onMounted(async () => {
+  const res = await axios.post('http://localhost:3000/private', {
+    id: localStorage.getItem('id')
+  },{
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })
+
+  console.log(res.data);
+
+  visibility.value.user = !res.data[0].showinsearch;
+  visibility.value.music = !res.data[0].showlastmusic;
+
+  console.log(visibility.value)
+})
 
 const isModal = ref(false)
 const confirmValue = ref('')
@@ -33,6 +50,43 @@ const deleteProfile = async () => {
     errors.value = e.response.data.message;
   }
 }
+
+const visibility = ref({
+  user: null,
+  music: null
+})
+
+const changeUserVisibility = async () => {
+  const value = visibility.value.user;
+
+  await axios.post('http://localhost:3000/userVisibility', {
+    id: localStorage.getItem('id'),
+    value: value
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  });
+}
+
+const changeMusicVisibility = async () => {
+  const value = visibility.value.music;
+
+  await axios.post('http://localhost:3000/musicVisibility', {
+    id: localStorage.getItem('id'),
+    value: value
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  });
+}
+
+const clearData = () => {
+  localStorage.clear();
+
+  location.reload();
+}
 </script>
 
 <template>
@@ -43,7 +97,7 @@ const deleteProfile = async () => {
       </h3>
 
       <div class="checkbox">
-        <input type="checkbox">
+        <input type="checkbox" v-model="visibility.user" @input="changeUserVisibility()">
         <div>
           <h6>Make sure that i'll be havent't seen on public search</h6>
           <p>This setting will hide your account and keep it private</p>
@@ -51,7 +105,7 @@ const deleteProfile = async () => {
       </div>
 
       <div class="checkbox">
-        <input type="checkbox">
+        <input type="checkbox" v-model="visibility.music" @input="changeMusicVisibility()">
         <div>
           <h6>Don't show my lastly listened song</h6>
           <p>This setting will hide information about your lastly listened song</p>
@@ -62,13 +116,13 @@ const deleteProfile = async () => {
 
     <section>
       <h3>
-        Change email
+        Logout
       </h3>
       <p>
-        Changing your email will have unintended side effects
+        You will be logged out from your account.
       </p>
-      <button>
-        Change email
+      <button @click="clearData()">
+        Logout
       </button>
     </section>
 

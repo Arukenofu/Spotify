@@ -4,6 +4,7 @@ import {musicStore} from "../stores/MusicStore";
 import {onMounted, ref} from "vue";
 import {useMediaControls} from "@vueuse/core";
 import router from "../router";
+import axios from "axios";
 
 const store = musicStore();
 const getDate = () => {
@@ -22,8 +23,18 @@ const getDate = () => {
   }
 }
 
-onMounted(() => {
+const favorites = ref();
+
+const isLoaded = ref(false);
+
+onMounted(async () => {
   playing.value = store.playing;
+
+  favorites.value = (await axios.post('http://localhost:3000/getFavorites', {
+    userID: localStorage.getItem('id')
+  })).data;
+
+  isLoaded.value = true;
 })
 
 const audio = ref(document.getElementById('musicRoot'))
@@ -48,6 +59,8 @@ const togglePlayArrowById = (el) => {
   }
 }
 
+
+
 </script>
 
 <template>
@@ -58,7 +71,7 @@ const togglePlayArrowById = (el) => {
   <div class="favorite-page">
     <div class="playlist-head head">
       <h2>{{getDate()}}</h2>
-      <p v-if="store.albums.length > 6" >
+      <p v-if="store.albums.length > 6">
         Show all
       </p>
     </div>
@@ -73,16 +86,15 @@ const togglePlayArrowById = (el) => {
         </div>
       </div>
     </div>
-
-    <div class="music-head head">
+    <div class="music-head head" v-if="isLoaded && favorites?.length">
       <h2>Your Favorites</h2>
-      <p v-if="store.music.length > 7" @click="router.push('/fav-musics')">
+      <p v-if="favorites.length > 6" @click="router.push('/fav-musics')">
         Show All
       </p>
     </div>
-    <div class="favorite-music">
+    <div class="favorite-music" v-if="isLoaded">
       <div class="music"
-           v-for="(music, index) in store.music.slice(0, 7)"
+           v-for="(music, index) in favorites.slice(0, 7)"
            :class="playing ?
                store.music[store.currentMusic].name === music.name ? 'active' : '' : ''"
       >
@@ -90,6 +102,7 @@ const togglePlayArrowById = (el) => {
           <button
               class="material-symbols-outlined"
               @click="
+                    store.music = favorites;
                     store.currentMusic = index;
                     playing = !playing
                   "

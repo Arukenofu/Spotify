@@ -70,7 +70,7 @@ const checkParams = () => {
         <div class="album-text-info">
           <p>PLAYLIST</p>
           <h1 v-if="isStoreAlbum()">{{currentMusic.name}}</h1>
-          <h1 v-else>Current Playlist</h1>
+          <h1 v-else>Current Queue</h1>
 
           <div class="info">
             <div class="creator-avatar" v-if="isStoreAlbum()" />
