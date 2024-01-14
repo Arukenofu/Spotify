@@ -29,8 +29,6 @@ const filterByAmount = (value) => {
   }
 }
 
-
-
 const isStoreAlbum = () => {
   return !!(store.currentPlaylistId || route.params.id);
 }

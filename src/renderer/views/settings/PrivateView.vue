@@ -16,6 +16,7 @@ onMounted(async () => {
 
   visibility.value.user = !res.data[0].showinsearch;
   visibility.value.music = !res.data[0].showlastmusic;
+    visibility.value.favorite = !res.data[0].showfavorites;
 
   console.log(visibility.value)
 })
@@ -53,7 +54,8 @@ const deleteProfile = async () => {
 
 const visibility = ref({
   user: null,
-  music: null
+  music: null,
+  favorite: null
 })
 
 const changeUserVisibility = async () => {
@@ -73,6 +75,19 @@ const changeMusicVisibility = async () => {
   const value = visibility.value.music;
 
   await axios.post('http://localhost:3000/musicVisibility', {
+    id: localStorage.getItem('id'),
+    value: value
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  });
+}
+
+const changeFavoriteVisibility = async () => {
+  const value = visibility.value.favorite;
+
+  await axios.post('http://localhost:3000/changeFavoriteVisibility', {
     id: localStorage.getItem('id'),
     value: value
   }, {
@@ -109,6 +124,14 @@ const clearData = () => {
         <div>
           <h6>Don't show my lastly listened song</h6>
           <p>This setting will hide information about your lastly listened song</p>
+        </div>
+      </div>
+
+      <div class="checkbox">
+        <input type="checkbox" v-model="visibility.favorite" @input="changeFavoriteVisibility()">
+        <div>
+          <h6>Don't show my favorite music list</h6>
+          <p>This setting will hide information about your favorite music list</p>
         </div>
       </div>
 

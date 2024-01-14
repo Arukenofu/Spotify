@@ -43,7 +43,9 @@ watch(route, () => {
   </keep-alive>
   <NavBar v-if="$route.name !== 'Authentication'" />
   <div style="width: calc(100% - 100px); display: flex; flex-direction: column"
-       :style="$route.name !== 'Authentication' ? 'margin-bottom: 80px; margin-top: 30px;' : ''" v-if="isLoading === true">
+       :style="$route.name !== 'Authentication' ? 'margin-bottom: 80px; margin-top: 30px;' : ''"
+       v-if="isLoading === true"
+  >
     <router-view>
 
     </router-view>

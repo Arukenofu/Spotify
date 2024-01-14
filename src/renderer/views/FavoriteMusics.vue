@@ -16,6 +16,8 @@ onMounted(async () => {
 
   favorites.value = (await axios.post('http://localhost:3000/getFavorites', {
     userID: localStorage.getItem('id')
+  }, {
+    Authorization: `${localStorage.getItem('token')}`,
   })).data;
 
   isLoaded.value = true

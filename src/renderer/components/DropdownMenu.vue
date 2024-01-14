@@ -1,10 +1,13 @@
 <script setup>
-
 import {useMouse} from "@vueuse/core/index";
+import {ref, watch} from "vue";
 
 const {x, y} = useMouse();
 
-const isActive = false;
+const isActive = ref(false);
+
+const cacheX = ref();
+const cacheY = ref();
 
 const selectionData = {
   musicAdd: [
@@ -86,7 +89,7 @@ const selectionData = {
 </script>
 
 <template>
-  <div class="dropdown-menu" :style="`left: ${x}px; top: ${y}px;`" style="display: none">
+  <div class="dropdown-menu" :style="isActive ? `left: ${x}px; top: ${y}px;` : `left: ${cacheX}px; top: ${cacheY}px;`">
     <ul class="options-list">
       <li v-for="option in selectionData.musicAdd">
         <button @click="option.function()">
@@ -106,6 +109,7 @@ const selectionData = {
     min-width: 200px;
     background-color: #1a1a1a;
     border-radius: 6px;
+    z-index: 3;
 
     .options-list {
       padding: 4px;

@@ -11,7 +11,7 @@ import {onMounted} from "vue";
 </script>
 
 <template>
-    <SearchBar @click="router.push('/search')"/>
+    <SearchBar/>
     <main>
       <div class="content">
         <MusicCard />

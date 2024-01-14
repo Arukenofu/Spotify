@@ -1,20 +1,24 @@
 <script setup>
 import {ref} from "vue";
 import router from "../router";
-import axios from "axios";
+import {useRoute} from "vue-router";
 const value = ref('')
 
-const logout = async() => {
-  await router.push('/user')
-}
+const route = useRoute();
 
 const avatar = ref(localStorage.getItem('avatar'))
+
+const isThatPage = () => {
+  if (route.name !== 'search') {
+    router.push('/search')
+  }
+}
 
 </script>
 
 <template>
   <div class="header-top">
-    <div class="search-field">
+    <div class="search-field" @click="isThatPage()">
 
       <span class="material-symbols-outlined">
         radio_button_unchecked
@@ -49,7 +53,7 @@ const avatar = ref(localStorage.getItem('avatar'))
       </div>
 
       <div class="account">
-        <div class="user-profile" :style="`background-image: url('${avatar}')`" @click="logout()" />
+        <div class="user-profile" :style="`background-image: url('${avatar}')`" />
       </div>
 
     </div>

@@ -108,7 +108,6 @@ watch (() => route.params.id, async () => {
 
   isLoaded.value = true;
 })
-
 </script>
 
 <template>
@@ -145,7 +144,7 @@ watch (() => route.params.id, async () => {
         Gender: {{user.gender}}
       </p>
       <p>
-        Subscribe: 30
+        Subscribes: {{subscribes.length}}
       </p>
       <p>
         Subscribed: 12
@@ -163,7 +162,10 @@ watch (() => route.params.id, async () => {
   </div>
 
   <div class="user-info" >
-    <h2 v-if="favorites?.length">Favorites</h2>
+    <div class="user-info-head" v-if="favorites?.length">
+      <h2>Favorites</h2>
+      <span v-if="favorites.length < 5">Show All</span>
+    </div>
     <div class="card-wrap">
       <div class="card" v-for="favorite in favorites.slice(0, 5)">
         <div class="image" :style="`background-image: url('${favorite.image}')`" />
@@ -172,7 +174,11 @@ watch (() => route.params.id, async () => {
       </div>
     </div>
 
-    <h2 v-if="subscribes  ?.length">Subscribes</h2>
+
+    <div class="user-info-head" v-if="subscribes?.length">
+      <h2>Subscribes</h2>
+      <span v-if="subscribes.length < 6">Show All</span>
+    </div>
     <div class="card-wrap">
       <div class="card" @click="$router.push(`/user/${subscribe.id}`)" v-for="subscribe in subscribes.slice(0, 5)">
         <div class="image" :style="`background-image: url('${subscribe.avatar}')`" />
@@ -273,10 +279,22 @@ watch (() => route.params.id, async () => {
       width: calc(100% - 100px - 300px);
       margin-left: 15px;
 
-      h2 {
-        font-size: 2rem;
-        font-weight: 600;
-        margin-bottom: 20px;
+      .user-info-head {
+        display: flex;
+        justify-content: space-between;
+
+        h2 {
+          font-size: 2rem;
+          font-weight: 600;
+          margin-bottom: 20px;
+        }
+
+        span {
+          font-size: 1rem;
+          margin-top: 20px;
+          color: #868686;
+          cursor: pointer;
+        }
       }
 
       .card-wrap {
