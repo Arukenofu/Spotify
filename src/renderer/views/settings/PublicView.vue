@@ -64,7 +64,7 @@ const updateProfile = async () => {
 <template>
   <div class="content" v-if="isLoaded">
 
-    <h3>Public Profile</h3>
+    <h3>Профиль</h3>
 
     <div class="options">
 
@@ -73,61 +73,61 @@ const updateProfile = async () => {
 
           <div class="form">
             <label for="username">
-              Name
+              Никнейм
             </label>
             <input type="text" name="username" v-model="formData.name">
             <p>
-              Your nickname can be used for public communication and identification in the online environment,
-              as well as to create a unique virtual image or character.
+              Ваш никнейм может быть использован для публичного общения и идентификации в онлайн-среде.
+              а также для создания уникального виртуального образа или персонажа.
             </p>
           </div>
 
           <div class="form">
             <label for="description">
-              Description
+              Описание
             </label>
             <textarea name="description" v-model="formData.description">
 
             </textarea>
             <p>
-              Profile description is brief information about you.
-              This is your online business card, helping other users better understand
-              who you are and what inspires you.
+              Описание профиля – это краткая информация о вас.
+              Это ваша онлайн-визитка, помогающая другим пользователям лучше понять
+              кто вы и что вас вдохновляет.
             </p>
           </div>
 
           <div class="form">
             <label for="gender">
-              Gender
+              Пол
             </label>
             <select name="gender" v-model="formData.gender">
               <option>Male</option>
               <option>Female</option>
             </select>
             <p>
-              There are only two genders in our politics.
+              Существует только два пола.
             </p>
           </div>
 
           <div class="form">
             <label for="location">
-              Location
+              Страна
             </label>
             <input placeholder="Your Country" type="text" name="location" v-model="formData.location">
             <p>
-              Your current country, location.
+              Ваша текущая страна, местоположение.
             </p>
           </div>
 
           <button type="submit">
-            Submit
+            Отправить
           </button>
         </div>
       </form>
 
       <div class="photo-options">
           <h2>
-            Profile Picture
+            Аватарка
           </h2>
           <div class="avatar" :style="formData.image ? `background-image: url('${formData.image}')` : `background-image: url('${user.avatar}')`">
             <div class="table">
@@ -135,7 +135,7 @@ const updateProfile = async () => {
                 <input type="file" accept="image/png" @change="previewImage">
                 <span>
                   <span class="material-symbols-outlined">photo_camera</span>
-                  Take a file...
+                  Выбрать файл...
                 </span>
               </label>
             </div>

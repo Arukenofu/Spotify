@@ -71,7 +71,7 @@ const changeFavorites = async () => {
   if (isLiked.value === false) {
     await axios.post('http://localhost:3000/addFavorite', {
       userId: localStorage.getItem('id'),
-      musicId: currentMusic.value+1
+      musicId: currentAudio.value.id,
     },{
       headers: {
         Authorization: `${localStorage.getItem('token')}`,
@@ -85,7 +85,7 @@ const changeFavorites = async () => {
 
   await axios.post('http://localhost:3000/deleteFavorite', {
     userId: localStorage.getItem('id'),
-    musicId: currentMusic.value+1
+    musicId: currentAudio.value.id,
   }, {
     headers: {
       Authorization: `${localStorage.getItem('token')}`,
@@ -111,9 +111,9 @@ const isLiked = ref();
 
 watch(currentMusic,
       async (value) => {
-      useMediaControls(audio, {
-        src: ref(currentAudio.value.song)
-      });
+        useMediaControls(audio, {
+          src: ref(currentAudio.value.song)
+        });
 
         await axios.post('http://localhost:3000/updateMusic', {
           id: localStorage.getItem('id'),
@@ -125,7 +125,7 @@ watch(currentMusic,
         })
 
         isLiked.value = (await axios.post('http://localhost:3000/isLiked', {
-          musicId: value+1,
+          musicId: currentAudio.value.id,
           userId: Number(localStorage.getItem('id'))
         }, {
           headers: {

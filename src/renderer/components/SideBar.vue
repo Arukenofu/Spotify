@@ -32,7 +32,7 @@ const friends = computed(() => {
     <transition name="toggle">
       <div class="friend-activity">
         <div class="sidebar-header">
-          <h2>Subscription Activity</h2>
+          <h2>Активность</h2>
           <span class="material-symbols-outlined">
             view_cozy
           </span>
@@ -50,7 +50,7 @@ const friends = computed(() => {
                     {{store.globalMusic[friend.hearing].singer + ' - ' + store.globalMusic[friend.hearing].name}}
                   </button>
                   <button v-else>
-                    No data
+                    Скрыто
                   </button>
                 </div>
               </div>

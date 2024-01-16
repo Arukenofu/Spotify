@@ -18,7 +18,7 @@ const user = ref({
           <h2>
             {{user.username}}
           </h2>
-          <p>Your personal account</p>
+          <p>Ваша учётная запись</p>
         </div>
       </div>
 
@@ -30,7 +30,7 @@ const user = ref({
               <span class="material-symbols-outlined">
                 person
               </span>
-              Public profile
+              Профиль
             </li>
           </router-link>
 
@@ -39,7 +39,7 @@ const user = ref({
                 <span class="material-symbols-outlined">
                   settings
                 </span>
-              Private settings
+              Приватность
             </li>
           </router-link>
 
@@ -48,7 +48,7 @@ const user = ref({
                 <span class="material-symbols-outlined">
                   brush
                 </span>
-              Appearance
+              Тема
             </li>
           </router-link>
 

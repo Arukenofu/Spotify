@@ -92,7 +92,7 @@ watch(search, async () => {
     <div class="search-field">
       <div class="tracks" v-if="bestTrack.length">
         <div class="best-track">
-          <h2>Best Track</h2>
+          <h2>Лучший трек</h2>
           <div
               class="best-music-block"
               v-if="bestTrack.length"
@@ -117,7 +117,7 @@ watch(search, async () => {
           </div>
         </div>
         <div class="other-tracks">
-          <h2>Tracks</h2>
+          <h2>Треки</h2>
           <div class="track-list">
             <div
                 class="track"
@@ -155,9 +155,9 @@ watch(search, async () => {
         </div>
       </div>
       <div class="albums-section" v-if="findAlbumBySearch.length">
-        <h2>Albums</h2>
+        <h2>Альбомы</h2>
         <div class="albums-wrap">
-          <div class="album" v-for="album in findAlbumBySearch" :key="album.id">
+          <div class="album" v-for="album in findAlbumBySearch.slice(0, 4)" :key="album.id">
             <div class="image" :style="`background-image: url('${album.picture}')`">
               <button
                   class="material-symbols-outlined"
@@ -178,7 +178,7 @@ watch(search, async () => {
       </div>
 
       <div class="albums-section" v-if="users.length">
-        <h2>Users</h2>
+        <h2>Пользователи</h2>
         <div class="albums-wrap">
           <div class="album" v-for="user in users" :key="user.id" @click="$router.push(`/user/${user.id}`)">
             <div class="picture" :style="`background-image: url('${user.avatar}')`">
@@ -435,6 +435,7 @@ watch(search, async () => {
           background-color: #050505;
           transition: 0.2s;
           padding: 18px;
+
           &:hover {
             background-color: #121212;
 
@@ -450,6 +451,8 @@ watch(search, async () => {
             aspect-ratio: 1/1;
             border-radius: 6px;
             margin-bottom: 15px;
+            background-position: center;
+            background-size: cover;
 
             button {
               opacity: 0;

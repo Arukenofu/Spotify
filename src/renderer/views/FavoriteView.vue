@@ -10,16 +10,16 @@ const store = musicStore();
 const getDate = () => {
   const hour = new Date().getHours()
   if (hour >= 0 && hour <= 6) {
-    return "Good Night"
+    return "Доброй ночи"
   }
   if (hour > 6 && hour <= 12) {
-    return "Good Morning"
+    return "Доброе утро"
   }
   if (hour > 12 && hour <= 18) {
-    return "Have a Good Day"
+    return "Добрый день"
   }
   if (hour > 18 && hour <= 24) {
-    return "Good Evening"
+    return "Добрый вечер"
   }
 }
 
@@ -74,7 +74,7 @@ const togglePlayArrowById = (el) => {
     <div class="playlist-head head">
       <h2>{{getDate()}}</h2>
       <p v-if="store.albums.length > 6">
-        Show all
+        Показать все
       </p>
     </div>
     <div class="favorite-playlist">
@@ -89,9 +89,9 @@ const togglePlayArrowById = (el) => {
       </div>
     </div>
     <div class="music-head head" v-if="isLoaded && favorites?.length">
-      <h2>Your Favorites</h2>
+      <h2>Ваши избранные</h2>
       <p v-if="favorites.length > 6" @click="router.push('/fav-musics')">
-        Show All
+        Показать все
       </p>
     </div>
     <div class="favorite-music" v-if="isLoaded">
@@ -122,7 +122,7 @@ const togglePlayArrowById = (el) => {
     </div>
 
     <div class="recent head">
-      <h2>Recent Musics</h2>
+      <h2>Последняя музыка</h2>
     </div>
     <div class="recent-music">
       <div class="recent" v-for="(recent, index) in store.recentlyPlayed">
@@ -212,6 +212,8 @@ const togglePlayArrowById = (el) => {
           aspect-ratio: 1/1;
           border-bottom-left-radius: 4px;
           border-top-left-radius: 4px;
+          background-size: cover;
+          background-position: center;
         }
 
         .playlist-name {

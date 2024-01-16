@@ -24,18 +24,12 @@ const isThatPage = () => {
         radio_button_unchecked
       </span>
 
-      <input type="text" placeholder="Search..." v-model="value" @input="$emit('event', value)" id="inputRoot" />
+      <input type="text" placeholder="Поиск..." v-model="value" @input="$emit('event', value)" id="inputRoot" />
 
       <div class='spacer-box' />
 
 
 
-      <div class="filters">
-        <span class="material-symbols-outlined">
-            page_info
-        </span>
-        <p>Filters</p>
-      </div>
     </div>
 
     <div style="display: flex; flex: 20;">

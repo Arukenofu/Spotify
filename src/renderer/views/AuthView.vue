@@ -110,47 +110,39 @@ const register = async () => {
     <div class="modal">
       <div class="form">
         <div class="input-layer">
-            <h2>{{!isRegister ? 'Welcome Back.' : 'Hello, Newbie.'}}</h2>
+            <h2>{{!isRegister ? 'Добро пожаловать' : 'Привет, новенький.'}}</h2>
             <p>
-              {{!isRegister ? 'Don\'t have an account?' : 'Already have an account?'}}
-              <b @click="changeRegister()">{{!isRegister ? 'Sign Up' : 'Log in'}}</b>
+              {{!isRegister ? 'У вас нет учетной записи?' : 'У вас уже есть аккаунт?'}}
+              <b @click="changeRegister()">{{!isRegister ? 'Зарегистрироваться' : 'Вход'}}</b>
             </p>
           {{serverResp}}
 
 
           <transition name="v" mode="out-in">
             <form id="myForm" @submit.prevent="LogIn()" v-if="!isRegister" >
-              <input type="text" placeholder="Your Email" maxlength="35" class="userdata" v-model="loginData.email" @input="errors = []">
-              <input type="password" placeholder="Password" class="userdata" v-model="loginData.password" @input="errors = []">
-
-              <div class="options" onsubmit="return false;" style="margin-bottom: 30px">
-                <input type="checkbox" name="reminder" class="check" v-model="keepLogged" >
-                <label for="reminder">Keep me logged in</label>
-                <button>
-                  Forgot Password?
-                </button>
-              </div>
+              <input type="text" placeholder="Почта" maxlength="35" class="userdata" v-model="loginData.email" @input="errors = []">
+              <input type="password" placeholder="Пароль" class="userdata" v-model="loginData.password" @input="errors = []">
 
               <h6>{{errors[0]}}</h6>
 
               <button type="submit" class="post">
-                Sign In
+                Войти
               </button>
             </form>
             <form id="myForm" @submit.prevent="register()" v-else>
-              <input type="text" placeholder="Your Email" class="userdata" v-model="registrationData.email" @input="errors = []">
-              <input type="text" placeholder="Your Nickname" class="userdata" v-model="registrationData.username" @input="errors = []">
-              <input type="password" placeholder="Password" class="userdata last" v-model="registrationData.password" @input="errors = []">
+              <input type="text" placeholder="Почта" class="userdata" v-model="registrationData.email" @input="errors = []">
+              <input type="text" placeholder="Никнейм" class="userdata" v-model="registrationData.username" @input="errors = []">
+              <input type="password" placeholder="Пароль" class="userdata last" v-model="registrationData.password" @input="errors = []">
 
               <div class="options" :style="!errors.length ? 'margin-bottom: 10px;' : 'margin-bottom: 32px;'">
                 <input type="checkbox" name="reminder" class="check" v-model="isPrivacyRead">
-                <label for="reminder">I accept the Privacy Policy and Politics of Spotify.com</label>
+                <label for="reminder">Я принимаю политику конфиденциальности Spotify.com</label>
               </div>
 
               <h6>{{errors[0]}}</h6>
 
               <button type="submit" class="post" :style="errors.length ? '' : 'margin-top: 20px;'">
-                Register
+                Регистрация
               </button>
             </form>
           </transition>
@@ -221,7 +213,7 @@ const register = async () => {
 
         h2 {
           font-weight: 900;
-          font-size: 3rem;
+          font-size: 2rem;
           margin-bottom: 10px;
         }
 
@@ -230,6 +222,7 @@ const register = async () => {
           position: relative;
           bottom: 15px;
           font-weight: 400;
+          margin-bottom: 10px;
         }
 
         p {

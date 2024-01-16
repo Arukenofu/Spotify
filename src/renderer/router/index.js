@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import SearchView from "../views/SearchView.vue";
 import FavoriteView from "../views/FavoriteView.vue";
@@ -12,7 +12,7 @@ import PrivateView from "../views/settings/PrivateView.vue";
 import AppearanceView from "../views/settings/AppearanceView.vue";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',

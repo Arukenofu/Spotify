@@ -20,7 +20,7 @@ const genreView = computed(() => {
 
 <template>
   <div class="genres">
-    <h3>Genres</h3>
+    <h3>Жанры</h3>
     <div class="genre-wrap">
       <transition name="genreHeightAnimation">
         <div class="buttons" :class="genreToggle ? 'active' : 'inactive'">
@@ -37,7 +37,7 @@ const genreView = computed(() => {
         </div>
       </transition>
       <button class="button-all-genres" @click="genreToggle = !genreToggle">
-        {{!genreToggle ? 'All Genres' : 'Close'}}
+        {{!genreToggle ? 'Все жанры' : 'Закрыть'}}
       </button>
     </div>
   </div>

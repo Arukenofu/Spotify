@@ -37,7 +37,7 @@ onMounted(() => {
 
 <template>
 <div class="weekly-tracks">
-  <h3>Tracks Of The Week</h3>
+  <h3>Рекомендуем</h3>
 
   <div class="container">
     <div class="track" v-for="track in weeklyTracks" :key="track.id">

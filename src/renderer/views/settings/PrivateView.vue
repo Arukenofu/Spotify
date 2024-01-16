@@ -108,30 +108,30 @@ const clearData = () => {
   <div class="content">
     <section>
       <h3>
-        Private Settings
+        Настройки приватности
       </h3>
 
       <div class="checkbox">
         <input type="checkbox" v-model="visibility.user" @input="changeUserVisibility()">
         <div>
-          <h6>Make sure that i'll be havent't seen on public search</h6>
-          <p>This setting will hide your account and keep it private</p>
+          <h6>Убедитесь, чтобы вас не видели в публичном поиске.</h6>
+          <p>Эта настройка скроет вашу учетную запись и сохранит ее конфиденциальность.</p>
         </div>
       </div>
 
       <div class="checkbox">
         <input type="checkbox" v-model="visibility.music" @input="changeMusicVisibility()">
         <div>
-          <h6>Don't show my lastly listened song</h6>
-          <p>This setting will hide information about your lastly listened song</p>
+          <h6>Не показывать мою последнюю прослушанную песню.</h6>
+          <p>Эта настройка скроет информацию о последней прослушанной вами песне.</p>
         </div>
       </div>
 
       <div class="checkbox">
         <input type="checkbox" v-model="visibility.favorite" @input="changeFavoriteVisibility()">
         <div>
-          <h6>Don't show my favorite music list</h6>
-          <p>This setting will hide information about your favorite music list</p>
+          <h6>Не показывать мой список любимой музыки.</h6>
+          <p>Эта настройка скроет информацию о вашем списке любимой музыки.</p>
         </div>
       </div>
 
@@ -139,37 +139,37 @@ const clearData = () => {
 
     <section>
       <h3>
-        Logout
+        Выйти из учетной записи
       </h3>
       <p>
-        You will be logged out from your account.
+        Вы выйдете из своей учетной записи.
       </p>
       <button @click="clearData()">
-        Logout
+        Выйти
       </button>
     </section>
 
     <section>
       <h3>
-        Change password
+        Изменить пароль
       </h3>
       <p>
-        Changing your password will have unintended side effects
+        Изменение пароля будет иметь непредвиденные побочные эффекты.
       </p>
       <button>
-        Change password
+        Изменить
       </button>
     </section>
 
     <section>
       <h3>
-        Delete account
+        Удалить аккаунт
       </h3>
       <p>
-        Once you delete your account, there is no back to restore your account.
+        После того как вы удалите свою учетную запись, восстановить ее будет невозможно.
       </p>
       <button @click="isModal = true">
-        Delete account
+        Удалить
       </button>
     </section>
   </div>
@@ -179,28 +179,28 @@ const clearData = () => {
       <div class="modal">
         <div class="overlay-header">
           <h3>
-            Are you really sure to do this?
+            Вы действительно уверены, что хотите удалить?
           </h3>
           <button class="material-symbols-outlined" @click="isModal = false">
             close
           </button>
         </div>
         <div class="warning">
-          You can no longer restore your account after finish this.
+          После завершения этой процедуры вы больше не сможете восстановить свою учетную запись.
         </div>
 
         <label for="email">
-          Email
+          Почта
         </label>
         <input type="text" v-model="formData.email">
 
         <label for="password">
-          Password
+          Пароль
         </label>
         <input type="password" v-model="formData.password">
 
         <label>
-          Type "ICONFIRM"
+          Напишите "ICONFIRM"
         </label>
         <input type="text" v-model="confirmValue">
 
@@ -213,7 +213,7 @@ const clearData = () => {
             :class="confirmValue !== 'ICONFIRM' ? 'disabled' : ''"
             @click="deleteProfile()"
         >
-          Delete my account
+          Удалить учётную запись
         </button>
       </div>
     </div>
@@ -314,7 +314,7 @@ const clearData = () => {
   z-index: 2;
   top: 0;
   width: 100%;
-  position: absolute;
+  position: fixed;
   height: 100%;
   background-color: rgb(1,1,1, 0.8);
 

@@ -18,7 +18,7 @@ onMounted(async () => {
     userID: localStorage.getItem('id')
   }, {
     Authorization: `${localStorage.getItem('token')}`,
-  })).data;
+  })).data.reverse();
 
   isLoaded.value = true
 })

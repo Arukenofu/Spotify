@@ -13,9 +13,7 @@ const route = useRoute();
 const store = musicStore();
 
 onMounted(async () => {
-  isRouteParam.value = !!route.params.id;
-  console.log(isRouteParam.value);
-  console.log(isRouteParam.value ? route.params.id : localStorage.getItem('id'));
+  isRouteParam.value = route.params.id !== localStorage.getItem('id');
 
   user.value = (await axios.post('http://localhost:3000/userProfile', {
     id: isRouteParam.value ? route.params.id : localStorage.getItem('id')
@@ -116,7 +114,7 @@ watch (() => route.params.id, async () => {
     <div class="avatar" :style="`background-image: url('${user.avatar}')`" />
 
     <button v-if="!isRouteParam" class="edit-profile" @click="$router.push('/settings/')">
-      Edit Profile
+      Изменить профиль
     </button>
     <button class="edit-profile" v-else @click="isSubscribed ? unsubscribe() : subscribe()">
       {{!isSubscribed ? 'Unsubscribe' : 'Subscribe'}}
@@ -125,13 +123,13 @@ watch (() => route.params.id, async () => {
     <div class="head-info">
       <div class="last-visit">
         <span>
-          Last Visit
+          Посещение
         </span>
-        <p>3 Months Ago</p>
+        <p>3 месяца назад</p>
       </div>
       <div class="place">
         <span>
-          Place
+          Страна
         </span>
         <p>
           {{user.location}}
@@ -141,19 +139,19 @@ watch (() => route.params.id, async () => {
 
     <div class="body-info">
       <p>
-        Gender: {{user.gender}}
+        Пол: {{user.gender}}
       </p>
       <p>
-        Subscribes: {{subscribes.length}}
+        Подписки: {{subscribes.length}}
       </p>
       <p>
-        Subscribed: 12
+        Подписчики: 12
       </p>
     </div>
 
     <div class="last-visited" v-if="user.hearing">
       <span>
-        Recently Heared
+        Последняя активность
       </span>
 
       <div class="recent" :style="`background-image: url('${store.globalMusic[user.hearing].image}')`">
@@ -163,8 +161,8 @@ watch (() => route.params.id, async () => {
 
   <div class="user-info" >
     <div class="user-info-head" v-if="favorites?.length">
-      <h2>Favorites</h2>
-      <span v-if="favorites.length < 5">Show All</span>
+      <h2>Избранные</h2>
+      <span v-if="favorites.length > 5">Показать всё</span>
     </div>
     <div class="card-wrap">
       <div class="card" v-for="favorite in favorites.slice(0, 5)">
@@ -176,8 +174,8 @@ watch (() => route.params.id, async () => {
 
 
     <div class="user-info-head" v-if="subscribes?.length">
-      <h2>Subscribes</h2>
-      <span v-if="subscribes.length < 6">Show All</span>
+      <h2>Подписки</h2>
+      <span v-if="subscribes.length > 6">Показать всё</span>
     </div>
     <div class="card-wrap">
       <div class="card" @click="$router.push(`/user/${subscribe.id}`)" v-for="subscribe in subscribes.slice(0, 5)">

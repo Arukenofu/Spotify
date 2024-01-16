@@ -1,8 +1,11 @@
 <script setup>
+
+const id = localStorage.getItem('id');
+const isFirefox = typeof InstallTrigger !== 'undefined';
 </script>
 
 <template>
-  <div class="titleBar">
+  <div class="titleBar" v-if="!isFirefox">
     <h3>{{'Spotify - ' + $route.name}}</h3>
   </div>
   <nav>
@@ -34,7 +37,7 @@
       </span>
     </router-link>
 
-    <router-link to="/user">
+    <router-link :to="`/user/${id}`">
       <span class="material-symbols-rounded">
         person
       </span>

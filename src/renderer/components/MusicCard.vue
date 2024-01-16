@@ -25,11 +25,11 @@ onMounted(() => {
   <div class="music-wrap" v-if="store.albums.length">
     <div
         class="music"
-        v-for="album in albums"
+        v-for="album in albums.slice(0, 4)"
         :key="album.id"
         :style="`background-image: url(${album.picture})`"
     >
-      <p>{{album.musics.length}} Tracks</p>
+      <p>{{album.musics.length}} Треков</p>
 
       <div class="info-playlist">
         <div class="play">

@@ -66,14 +66,14 @@ const checkParams = () => {
         <div class="album-picture" v-if="isStoreAlbum()"
              :style="`background-image: url('${currentMusic.picture}')`" />
         <div class="album-text-info">
-          <p>PLAYLIST</p>
+          <p>Плейлист</p>
           <h1 v-if="isStoreAlbum()">{{currentMusic.name}}</h1>
-          <h1 v-else>Current Queue</h1>
+          <h1 v-else>Текущая Очередь</h1>
 
           <div class="info">
             <div class="creator-avatar" v-if="isStoreAlbum()" />
             <h6>
-              {{isStoreAlbum() ? ' pansuman' : ''}}  <span> {{isStoreAlbum() ? currentMusic.tracksamount : store.music.length}} tracks</span> &nbsp;<span v-if="isStoreAlbum()">15 min. 51 sec.</span>
+              {{isStoreAlbum() ? ' pansuman' : ''}} &nbsp;   <span>{{isStoreAlbum() ? currentMusic.tracksamount : store.music.length}} треков</span> &nbsp;<span v-if="isStoreAlbum()">15 мин. 51 сек.</span>
             </h6>
           </div>
         </div>
@@ -85,13 +85,13 @@ const checkParams = () => {
             #
           </div>
           <div class="name">
-            Name
+            Имя
           </div>
           <div class="date_added">
-            Date Added
+            Дата
           </div>
           <div class="auditions">
-            Auditions
+            Прослушивания
           </div>
           <div class="music-options" />
         </div>

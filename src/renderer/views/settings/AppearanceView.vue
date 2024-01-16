@@ -52,11 +52,11 @@ const currentChoose = ref(themes.find((element) => element.color === currentThem
 <template>
   <div class="content">
     <h3>
-      Theme preferences
+      Ваши предпочтения
     </h3>
 
     <p>
-      Choose how Spotify looks to you. Select a single theme.
+      Выберите, какую базовую тему выбрать для Spotify.
     </p>
 
     <section>

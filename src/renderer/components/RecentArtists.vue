@@ -21,7 +21,7 @@ const artists = [
 
 <template>
   <div class="recent-artists">
-    <h3>Recent Artists</h3>
+    <h3>Также рекомендуем</h3>
     <div class="artists">
       <div class="artist" v-for="artist in artists" :key="artist.id" :style="`background-image: url(${artist.picture}) `">
 
