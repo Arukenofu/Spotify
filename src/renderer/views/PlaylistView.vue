@@ -64,10 +64,10 @@ const checkParams = () => {
     >
       <div class="album-info">
         <div class="album-picture" v-if="isStoreAlbum()"
-             :style="`background-image: url('${currentMusic.picture}')`" />
+             :style="`background-image: url('${currentMusic?.picture}')`" />
         <div class="album-text-info">
           <p>Плейлист</p>
-          <h1 v-if="isStoreAlbum()">{{currentMusic.name}}</h1>
+          <h1 v-if="isStoreAlbum()">{{currentMusic?.name}}</h1>
           <h1 v-else>Текущая Очередь</h1>
 
           <div class="info">

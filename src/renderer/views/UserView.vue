@@ -3,6 +3,8 @@ import {useRoute} from "vue-router";
 import {onMounted, ref, watch} from "vue";
 import axios from "axios";
 import {musicStore} from "../stores/MusicStore";
+import {useMediaControls} from "@vueuse/core";
+import router from "../router";
 
 const user = ref();
 const favorites = ref();
@@ -16,12 +18,11 @@ onMounted(async () => {
   isRouteParam.value = route.params.id !== localStorage.getItem('id');
 
   user.value = (await axios.post('http://localhost:3000/userProfile', {
-    id: isRouteParam.value ? route.params.id : localStorage.getItem('id')
+    id: route.params.id
   })).data;
-  console.log(user.value)
 
   favorites.value = (await axios.post('http://localhost:3000/getFavorites', {
-    userID: isRouteParam.value ? route.params.id : localStorage.getItem('id')
+    userID: route.params.id
   })).data;
 
   if (isRouteParam.value) {
@@ -33,13 +34,19 @@ onMounted(async () => {
         Authorization: `${localStorage.getItem('token')}`,
       }
     })).data
-
-    console.log(isSubscribed.value);
   }
 
   subscribes.value = (await axios.post('http://localhost:3000/getSubscribes', {
-    userID: isRouteParam.value ? route.params.id : localStorage.getItem('id')
+    userID: route.params.id
   })).data
+
+  isStarlight.value = (await axios.post('http://localhost:3000/isStarlight', {
+    id:  route.params.id
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })).data;
 
   isLoaded.value = true;
 })
@@ -72,19 +79,22 @@ const unsubscribe = async () => {
   isSubscribed.value = false;
 }
 
+const isStarlight = ref(false);
+
 watch (() => route.params.id, async () => {
+  if (!route?.params?.id) {
+    return;
+  }
+
   isLoaded.value = false;
 
-  isRouteParam.value = !!route.params.id;
-  console.log(isRouteParam.value);
-  console.log(isRouteParam.value ? route.params.id : localStorage.getItem('id'));
-
   user.value = (await axios.post('http://localhost:3000/userProfile', {
-    id: isRouteParam.value ? route.params.id : localStorage.getItem('id')
+    id: route.params.id
   })).data;
+  console.log(user.value)
 
   favorites.value = (await axios.post('http://localhost:3000/getFavorites', {
-    userID: isRouteParam.value ? route.params.id : localStorage.getItem('id')
+    userID: route.params.id
   })).data;
 
   if (isRouteParam.value) {
@@ -101,23 +111,47 @@ watch (() => route.params.id, async () => {
   }
 
   subscribes.value = (await axios.post('http://localhost:3000/getSubscribes', {
-    userID: isRouteParam.value ? route.params.id : localStorage.getItem('id')
+    userID: route.params.id
   })).data
+
+  isStarlight.value = (await axios.post('http://localhost:3000/isStarlight', {
+    id:  route.params.id
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })).data;
 
   isLoaded.value = true;
 })
+
+const id = localStorage.getItem('id');
+
+const togglePlayArrowById = (el) => {
+  if (store.playing) {
+    return store.music[store.currentMusic].name === el.name ? 'pause' : 'play_arrow'
+  }
+  else {
+    return 'play_arrow';
+  }
+}
 </script>
 
 <template>
 <div class="layout" v-if="isLoaded">
   <div class="user-account">
     <div class="avatar" :style="`background-image: url('${user.avatar}')`" />
-
-    <button v-if="!isRouteParam" class="edit-profile" @click="$router.push('/settings/')">
+    <p class="username">
+      {{user.username}}
+      <span v-if="isStarlight" style="color: #b669ff" class="material-symbols-outlined">
+                  stars
+      </span>
+    </p>
+    <button v-if="route.params.id === id" class="edit-profile" @click="$router.push('/settings/')">
       Изменить профиль
     </button>
     <button class="edit-profile" v-else @click="isSubscribed ? unsubscribe() : subscribe()">
-      {{!isSubscribed ? 'Unsubscribe' : 'Subscribe'}}
+      {{!isSubscribed ? 'Отписаться' : 'Подписаться'}}
     </button>
 
     <div class="head-info">
@@ -162,11 +196,23 @@ watch (() => route.params.id, async () => {
   <div class="user-info" >
     <div class="user-info-head" v-if="favorites?.length">
       <h2>Избранные</h2>
-      <span v-if="favorites.length > 5">Показать всё</span>
+      <span v-if="favorites.length > 5" @click="router.push(`/fav-musics/${route.params.id}`)">
+        Показать всё
+      </span>
     </div>
     <div class="card-wrap">
-      <div class="card" v-for="favorite in favorites.slice(0, 5)">
-        <div class="image" :style="`background-image: url('${favorite.image}')`" />
+      <div class="card"
+           v-for="(favorite, index) in favorites.slice(0, 5)"
+           :key="favorite.id"
+      >
+        <div class="image" :style="`background-image: url('${favorite.image}')`">
+          <button
+              class="material-symbols-outlined"
+              @click="store.music = favorites; console.log(store.music); store.currentMusic = index; store.playing = !store.playing"
+          >
+            {{togglePlayArrowById(favorite)}}
+          </button>
+        </div>
         <h3>{{favorite.name}}</h3>
         <p>{{favorite.singer}}</p>
       </div>
@@ -200,13 +246,26 @@ watch (() => route.params.id, async () => {
     top: 0;
 
     .avatar {
-      margin: 30px auto 15px;
+      margin: 30px auto 9px;
       width: 120px;
       aspect-ratio: 1/1;
       background-color: #1f1f1f;
       border-radius: 50%;
       background-position: center;
       background-size: cover;
+    }
+
+    .username {
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+
+      span {
+        margin-top: 3.2px;
+        font-size: 1.2rem;
+      }
     }
 
     .edit-profile {
@@ -311,6 +370,11 @@ watch (() => route.params.id, async () => {
 
           &:hover {
             background-color: #090909;
+
+            .image button {
+              opacity: 1;
+              transform: translateY(0px);
+            }
           }
 
           .image {
@@ -322,6 +386,26 @@ watch (() => route.params.id, async () => {
             background-color: #1a1a1a;
             background-size: cover;
             background-position: center;
+
+            button {
+              opacity: 0;
+              position: absolute;
+              background-color: var(--main);
+              border-radius: 50%;
+              border: none;
+              bottom: 12px;
+              right: 12px;
+              font-size: 1.5rem;
+              color: #000000;
+              padding: 10px;
+              font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+              transition: 0.2s;
+              transform: translateY(5px);
+
+              &:hover {
+                padding: 11px;
+              }
+            }
           }
 
           h3 {

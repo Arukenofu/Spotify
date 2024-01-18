@@ -181,7 +181,7 @@ export const musicStore = defineStore('', () => {
         }
     }
 
-    const recentlyPlayed = reactive([]);
+    const recentlyPlayed = ref([]);
 
     const search = ref('');
 

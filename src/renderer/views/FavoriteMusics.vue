@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import {useMediaControls} from "@vueuse/core";
 import {musicStore} from "../stores/MusicStore";
 import axios from "axios";
+import {useRoute} from "vue-router";
 
 const store = musicStore();
 const audio = ref(document.getElementById('musicRoot'))
@@ -11,11 +12,13 @@ const isLoaded = ref(false);
 const favorites = ref();
 const {playing} = useMediaControls(audio);
 
+const route = useRoute();
+
 onMounted(async () => {
   playing.value = store.playing;
 
   favorites.value = (await axios.post('http://localhost:3000/getFavorites', {
-    userID: localStorage.getItem('id')
+    userID: route.params.id || localStorage.getItem('id')
   }, {
     Authorization: `${localStorage.getItem('token')}`,
   })).data.reverse();

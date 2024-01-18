@@ -5,6 +5,9 @@ import axios from "axios";
 const user = ref({
 
 })
+
+const isStarlight = ref();
+
 const isLoaded = ref(false)
 onMounted(async () => {
   const data = await axios.post('http://localhost:3000/user', {id: id.value}, {
@@ -12,6 +15,14 @@ onMounted(async () => {
       Authorization: `${localStorage.getItem('token')}`,
     }
   });
+
+  isStarlight.value = (await axios.post('http://localhost:3000/isStarlight', {
+    id: localStorage.getItem('id')
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })).data;
 
   user.value = data.data[0];
   formData.value.name = user.value.username
@@ -25,6 +36,7 @@ const id = ref(localStorage.getItem('id'))
 const preview = ref(null);
 
 const previewImage = (event) => {
+  gif64.value = '';
   const input = event.target;
 
   if (input.files) {
@@ -57,6 +69,35 @@ const updateProfile = async () => {
   localStorage.setItem("username", response.data.username);
   console.log(localStorage.getItem('username'))
   localStorage.setItem("avatar", response.data.avatar)
+}
+
+const gif64 = ref();
+
+const focusInput = () => {
+  document.getElementById('gif').click();
+}
+
+const previewGif = (event) => {
+  const input = event.target;
+
+  if (input.files) {
+    let reader = new FileReader();
+
+    reader.onload = (e) => {
+      gif64.value = e.target.result;
+      sendGif();
+      localStorage.setItem('avatar', `http://localhost:3000/images/users/${localStorage.getItem('id')}/avatar.gif`)
+      location.reload()
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+const sendGif = async () => {
+  await axios.post('http://localhost:3000/setGif', {
+    id: localStorage.getItem('id'),
+    gif: gif64.value
+  })
 }
 
 </script>
@@ -113,7 +154,7 @@ const updateProfile = async () => {
             <label for="location">
               Страна
             </label>
-            <input placeholder="Your Country" type="text" name="location" v-model="formData.location">
+            <input placeholder="Страна" type="text" name="location" v-model="formData.location">
             <p>
               Ваша текущая страна, местоположение.
             </p>
@@ -126,10 +167,10 @@ const updateProfile = async () => {
       </form>
 
       <div class="photo-options">
-          <h2>
-            Аватарка
-          </h2>
-          <div class="avatar" :style="formData.image ? `background-image: url('${formData.image}')` : `background-image: url('${user.avatar}')`">
+        <h2>
+          Аватарка
+        </h2>
+        <div class="avatar" :style="formData.image ? `background-image: url('${gif64 ? gif64 : formData.image}')` : `background-image: url('${gif64 ? gif64 : user.avatar}')`">
             <div class="table">
               <label class="input-file">
                 <input type="file" accept="image/png" @change="previewImage">
@@ -140,7 +181,12 @@ const updateProfile = async () => {
               </label>
             </div>
           </div>
-        </div>
+
+        <button @click="focusInput()" class="starlight-button" v-if="isStarlight">
+          Выбрать Gif
+        </button>
+        <input type="file" accept="image/gif" id="gif" style="opacity: 0" @change="previewGif">
+      </div>
     </div>
   </div>
 </template>
@@ -306,6 +352,44 @@ const updateProfile = async () => {
         margin-top: 9px;
       }
     }
+  }
+}
+
+.starlight-button {
+  display: flex;
+  width: 90%;
+  padding: 10px 0;
+  align-items: center;
+  justify-content: center;
+  margin: 15px auto 0;
+  border: none;
+  border-radius: 3px;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientAnimation 3s infinite;
+}
+
+.send {
+  display: flex;
+  width: 40%;
+  margin: 9px auto 0;
+  padding: 6px 0;
+  align-items: center;
+  justify-content: center;
+  background-color: #ee7752;
+  border: none;
+  border-radius: 3px;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
   }
 }
 </style>

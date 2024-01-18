@@ -1,10 +1,23 @@
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import axios from "axios";
 
 const user = ref({
   email: localStorage.getItem('email'),
   username: localStorage.getItem('username'),
   avatar: localStorage.getItem('avatar')
+})
+
+const isStarlight = ref(false);
+
+onMounted(async () => {
+  isStarlight.value = (await axios.post('http://localhost:3000/isStarlight', {
+    id: localStorage.getItem('id')
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })).data;
 })
 
 </script>
@@ -15,7 +28,7 @@ const user = ref({
       <div class="user">
         <div class="avatar" :style="`background-image: url('${user.avatar}')`" />
         <div class="user-info">
-          <h2>
+          <h2 :style="isStarlight ? 'color: #b669ff' : ''">
             {{user.username}}
           </h2>
           <p>Ваша учётная запись</p>
@@ -49,6 +62,15 @@ const user = ref({
                   brush
                 </span>
               Тема
+            </li>
+          </router-link>
+
+          <router-link to="/starlight">
+            <li>
+                <span style="color: #b669ff" class="material-symbols-outlined">
+                  stars
+                </span>
+              Starlight
             </li>
           </router-link>
 
@@ -92,13 +114,12 @@ const user = ref({
           cursor: pointer;
           font-size: 1.2rem;
           font-weight: 600;
+          display: flex;
+          align-items: center;
 
           span {
-            font-size: 0.6rem;
-          }
-
-          &:hover {
-            text-decoration: underline;
+            font-size: 1.1rem;
+            margin-left: 5px;
           }
         }
         p {
@@ -109,6 +130,7 @@ const user = ref({
       }
     }
     .routes {
+
       ul {
         list-style-type: none;
 

@@ -1,6 +1,6 @@
 {
   "name": "Spotify",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "A minimal Electron + Vue application",
   "main": "build/main/main.js",
   "scripts": {

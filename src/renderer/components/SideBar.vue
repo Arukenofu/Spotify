@@ -1,8 +1,9 @@
 <script setup>
 import {UserStore} from "../stores/UserStore";
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {musicStore} from "../stores/MusicStore";
 import {useMediaControls} from "@vueuse/core/index";
+import axios from "axios";
 
 const userStore = UserStore();
 const {users} = userStore;
@@ -42,7 +43,12 @@ const friends = computed(() => {
               <div class="friend" v-if="users" v-for="friend in friends" :key="friend.id">
                 <div class="friend-pfp" @click="$router.push(`/user/${friend.id}`)" :style="`background-image: url(${friend.avatar})`" />
                 <div class="friend-text">
-                  <h2>{{friend.username}}</h2>
+                  <h2 :style="friend.isstarlight ? 'color: #b669ff;' : ''">
+                    {{friend.username}}
+                    <span v-if="friend.isstarlight" class="material-symbols-outlined">
+                      stars
+                    </span>
+                  </h2>
                   <button v-if="store.globalMusic[friend.hearing]"
                           @click="changeMusic(friend.hearing)"
                           :style="store.globalMusic[friend.hearing].name === store.music[store.currentMusic].name ? 'color: var(--main)' : ''"
@@ -56,7 +62,7 @@ const friends = computed(() => {
               </div>
           </div>
         </keep-alive>
-        <button class="view-more" @click="isOpened =! isOpened" v-if="friends.length >= 4">
+        <button class="view-more" @click="isOpened =! isOpened" v-if="friends.length >= 7">
           {{isOpened ? 'Close' : 'View All'}}
         </button>
       </div>
@@ -144,6 +150,11 @@ aside {
           h2 {
             font-size: 0.9rem;
             font-weight: 600;
+
+            span {
+              font-size: .7rem;
+              color: #b669ff;
+            }
           }
           button {
             text-align: start;

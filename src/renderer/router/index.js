@@ -10,6 +10,7 @@ import SettingsView from "../views/SettingsView.vue";
 import PublicView from "../views/settings/PublicView.vue";
 import PrivateView from "../views/settings/PrivateView.vue";
 import AppearanceView from "../views/settings/AppearanceView.vue";
+import StarlightView from "../views/settings/StarlightView.vue";
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -30,7 +31,7 @@ const router = createRouter({
       component: FavoriteView
     },
     {
-      path: '/fav-musics',
+      path: '/fav-musics/:id?',
       name: 'Favorite musics',
       component: FavoriteMusics
     },
@@ -68,7 +69,12 @@ const router = createRouter({
           path: '/Appearance',
           name: 'Appearance',
           component: AppearanceView,
-        }
+        },
+        {
+          path: '/starlight',
+          name: 'Starlight',
+          component: StarlightView,
+        },
       ],
     }
   ],

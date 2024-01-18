@@ -53,7 +53,8 @@ const LogIn = async () => {
     localStorage.setItem("username", response.data.username);
     localStorage.setItem("avatar", response.data.avatar)
     await musicStore().fetchMainAlbums();
-    await router.push('/')
+    await router.push('/');
+    location.reload()
   } catch (e) {
     errors.value.push(e?.response?.data?.message);
   }

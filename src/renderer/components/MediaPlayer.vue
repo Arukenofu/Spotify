@@ -14,6 +14,10 @@ const currentAudio = computed(() => {
   return store.music[currentMusic.value]
 })
 
+const currentMusicGlobalId = computed(() => {
+  return store.music
+})
+
 const audio = ref();
 const {playing, currentTime, duration, volume} = useMediaControls(audio, {
   src: ref(currentAudio.value.song)
@@ -95,8 +99,68 @@ const changeFavorites = async () => {
   isLiked.value = false;
 }
 
-onMounted( () => {
+const downloadMusic = async (url) => {
+  axios({
+    method: 'get',
+    url: url,
+    responseType: 'blob',
+  })
+      .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+
+        const fileName = 'downloaded_file.mp3';
+        link.setAttribute('download', fileName);
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+      })
+}
+
+console.log(store.music)
+
+  let objectArray = JSON.parse(localStorage.getItem('objectArray')) || [];
+
+const createObject = (key, name, image, singer, song, timestamp) => {
+  return {key, name, image, singer, song, timestamp}
+}
+
+const addObject = (key, name, image, singer, song) => {
+  const isKeyUnique = !objectArray.some(obj => obj.key === key);
+
+  if (!isKeyUnique) {
+    return;
+  }
+
+  const timestamp = new Date().getTime();
+
+  const newObject = createObject(key, name, image, singer, song, timestamp);
+
+  objectArray.unshift(newObject);
+
+  objectArray.sort((a, b) => b.timestamp - a.timestamp);
+
+  objectArray = objectArray.slice(0, 7);
+
+  localStorage.setItem('objectArray', JSON.stringify(objectArray));
+  store.recentlyPlayed = JSON.parse(localStorage.getItem('objectArray'))
+}
+
+const isStarlight = ref(false);
+
+onMounted( async () => {
   audioVolume.value = volume.value * 100;
+
+  isStarlight.value = (await axios.post('http://localhost:3000/isStarlight', {
+    id: localStorage.getItem('id')
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })).data;
 })
 
 navigator.mediaSession.setActionHandler('previoustrack', () => {
@@ -110,14 +174,14 @@ navigator.mediaSession.setActionHandler('nexttrack', () => {
 const isLiked = ref();
 
 watch(currentMusic,
-      async (value) => {
+      async () => {
         useMediaControls(audio, {
           src: ref(currentAudio.value.song)
         });
 
         await axios.post('http://localhost:3000/updateMusic', {
           id: localStorage.getItem('id'),
-          musicId: value
+          musicId: currentAudio.value.id-1
         }, {
           headers: {
             Authorization: `${localStorage.getItem('token')}`,
@@ -133,7 +197,7 @@ watch(currentMusic,
           }
         })).data
 
-        console.log(isLiked.value);
+        addObject(currentAudio.value.id, currentAudio.value.name, currentAudio.value.image, currentAudio.value.singer, currentAudio.value.song);
 
       navigator.mediaSession.metadata = new MediaMetadata({
         title: currentAudio.value.name,
@@ -219,7 +283,6 @@ watch(audio, (value) => {
           <p>{{currentAudio.name}}</p>
         </div>
       </div>
-
       <div class="controls">
         <button class="material-symbols-rounded"
                 @click="DecrementMusicID"
@@ -261,8 +324,8 @@ watch(audio, (value) => {
         <button class="material-symbols-outlined" @click="isShuffled =! isShuffled" :style="isShuffled ? 'color: var(--main);' : ''">
           shuffle
         </button>
-        <button class="material-symbols-outlined">
-          more_vert
+        <button @click="downloadMusic(currentAudio.song)" class="material-symbols-outlined" :disabled="!isStarlight">
+          download
         </button>
       </div>
     </div>
@@ -501,12 +564,16 @@ watch(audio, (value) => {
 
         &:last-child {
           margin-right: 15px;
-          color: #FFFFFF;
+          color: #ee82ee;
           font-variation-settings:
               'FILL' 0,
               'wght' 900,
               'GRAD' 0,
-              'opsz' 48
+              'opsz' 48;
+
+          &:disabled {
+            color: #858585;
+          }
         }
       }
     }

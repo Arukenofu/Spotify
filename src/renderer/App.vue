@@ -28,6 +28,13 @@ onMounted(async () => {
     userID: localStorage.getItem('id')
   })).data;
 
+  setInterval(async () => {
+    UserStore().users = (await axios.post('http://localhost:3000/getSubscribes', {
+      userID: localStorage.getItem('id')
+    })).data;
+    console.log('yes')
+  }, 5000)
+
   isLoading.value = true;
   store.recentlyPlayed = JSON.parse(localStorage.getItem('last'));
 })

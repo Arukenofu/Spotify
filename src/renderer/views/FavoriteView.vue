@@ -61,7 +61,7 @@ const togglePlayArrowById = (el) => {
   }
 }
 
-
+const favoriteMusics = JSON.parse(localStorage.getItem('objectArray')) || [];
 
 </script>
 
@@ -125,7 +125,7 @@ const togglePlayArrowById = (el) => {
       <h2>Последняя музыка</h2>
     </div>
     <div class="recent-music">
-      <div class="recent" v-for="(recent, index) in store.recentlyPlayed">
+      <div class="recent" v-for="(recent, index) in favoriteMusics">
         <div class="music-picture" :style="`background-image: url('${recent.image}');`">
           <button
               class="material-symbols-outlined"
