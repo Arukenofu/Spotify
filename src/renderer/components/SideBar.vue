@@ -24,7 +24,7 @@ const changeMusic = (friendMusic) => {
 }
 
 const friends = computed(() => {
-  return users
+  return users.slice(0, 6)
 })
 </script>
 
@@ -40,7 +40,7 @@ const friends = computed(() => {
         </div>
         <keep-alive>
           <div class="friends-activity-wrap" :class="isOpened ? 'friend-activity-active' : 'friend-activity-inactive'">
-              <div class="friend" v-if="users" v-for="friend in friends" :key="friend.id">
+              <div class="friend" v-if="users?.length" v-for="friend in friends" :key="friend.id">
                 <div class="friend-pfp" @click="$router.push(`/user/${friend.id}`)" :style="`background-image: url(${friend.avatar})`" />
                 <div class="friend-text">
                   <h2 :style="friend.isstarlight ? 'color: #b669ff;' : ''">
@@ -60,11 +60,11 @@ const friends = computed(() => {
                   </button>
                 </div>
               </div>
+              <div class="noFriend" v-else>
+                К сожалению, вы ни на кого не подписаны.
+              </div>
           </div>
         </keep-alive>
-        <button class="view-more" @click="isOpened =! isOpened" v-if="friends.length >= 7">
-          {{isOpened ? 'Close' : 'View All'}}
-        </button>
       </div>
     </transition>
   </aside>
@@ -125,6 +125,19 @@ aside {
 
     .friends-activity-wrap {
       transition: all 0.3s ease-in-out;
+      position: relative;
+
+      .noFriend {
+        position: absolute;
+        left: 50%;
+        top: 45%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        text-align: center;
+        font-size: 1rem;
+        color: #d9d9d9;
+      }
+
       .friend {
         height: 50px;
         display: flex;

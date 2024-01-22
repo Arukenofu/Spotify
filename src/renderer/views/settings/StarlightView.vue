@@ -2,6 +2,7 @@
 
 import {onMounted, ref} from "vue";
 import axios from "axios";
+import {useRoute} from "vue-router";
 
 const isStarlight = ref(false);
 
@@ -49,6 +50,8 @@ const subscribe = async () => {
 
   console.log(res.data)
 }
+
+const route = useRoute();
 </script>
 
 <template>

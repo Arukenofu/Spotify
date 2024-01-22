@@ -35,19 +35,19 @@ const isThatPage = () => {
     <div style="display: flex; flex: 20;">
 
       <div class="settings">
-      <span class="material-symbols-rounded">
-        verified_user
-      </span>
-        <span class="material-symbols-rounded">
-        settings
-      </span>
-        <span class="material-symbols-rounded">
-        notifications
-      </span>
+        <span title="Страница полностью защищена" class="material-symbols-rounded">
+          verified_user
+        </span>
+        <span @click="$router.push('/settings')" class="material-symbols-rounded">
+          settings
+        </span>
+        <span @click="$router.push('/starlight')" class="material-symbols-rounded">
+          stars
+        </span>
       </div>
 
       <div class="account">
-        <div class="user-profile" :style="`background-image: url('${avatar}')`" />
+        <div class="user-profile" @click="$router.push('/settings')" :style="`background-image: url('${avatar}')`" />
       </div>
 
     </div>
@@ -187,6 +187,7 @@ const isThatPage = () => {
     border-radius: 45px;
 
     .user-profile {
+      background-color: #FFFFFF;
       margin-left: auto;
       height: 100%;
       aspect-ratio: 1/1;

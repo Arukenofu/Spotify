@@ -15,11 +15,11 @@ const avatar = ref(localStorage.getItem('avatar'))
 
     <div class="other">
       <div class="bell">
-          <span class="material-symbols-outlined">
-            notifications
+          <span class="material-symbols-outlined" @click="$router.push('/starlight')">
+            stars
           </span>
       </div>
-      <div class="user" :style="`background-image: url('${avatar}')`">
+      <div class="user" @click="$router.push('/settings')" :style="`background-image: url('${avatar}')`">
 
       </div>
     </div>
@@ -38,6 +38,7 @@ const avatar = ref(localStorage.getItem('avatar'))
   justify-content: space-between;
   height: 60px;
   align-items: center;
+  z-index: 5;
 
   .back-option {
     height: 30px;
@@ -79,6 +80,7 @@ const avatar = ref(localStorage.getItem('avatar'))
       height: 35px;
       aspect-ratio: 1/1;
       border-radius: 50%;
+      background-color: #FFFFFF;
 
       &:hover {
         transform: scale(1.1);

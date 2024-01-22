@@ -27,6 +27,8 @@ const favorites = ref();
 
 const isLoaded = ref(false);
 
+const favoriteAlbums = ref([]);
+
 onMounted(async () => {
   playing.value = store.playing;
 
@@ -35,6 +37,21 @@ onMounted(async () => {
   }, {
     Authorization: `${localStorage.getItem('token')}`,
   })).data;
+
+  const favoriteList = (await axios.post('http://localhost:3000/getFavoriteAlbumsId', {
+    userid: localStorage.getItem('id')
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })).data;
+  console.log(favoriteList)
+
+  for (let i = 0; i < favoriteList.length; i++) {
+    favoriteAlbums.value.push(store.albums[favoriteList[i].albumid-1]);
+  }
+
+  console.log(favoriteAlbums.value)
 
   isLoaded.value = true;
 })
@@ -61,7 +78,7 @@ const togglePlayArrowById = (el) => {
   }
 }
 
-const favoriteMusics = JSON.parse(localStorage.getItem('objectArray')) || [];
+const recentMusics = JSON.parse(localStorage.getItem('objectArray')) || [];
 
 </script>
 
@@ -71,16 +88,13 @@ const favoriteMusics = JSON.parse(localStorage.getItem('objectArray')) || [];
   <top-nav class="nav" />
 
   <div class="favorite-page">
-    <div class="playlist-head head">
+    <div v-if="favoriteAlbums.length" class="playlist-head head">
       <h2>{{getDate()}}</h2>
-      <p v-if="store.albums.length > 6">
-        Показать все
-      </p>
     </div>
-    <div class="favorite-playlist">
-      <div class="playlist" v-for="playlist in musicStore().albums.slice(0, 6)">
-        <div class="playlist-picture" :style="`background-image: url('${playlist.picture}');`" />
-        <span class="playlist-name">
+    <div v-if="favoriteAlbums.length" class="favorite-playlist">
+      <div class="playlist" v-for="playlist in favoriteAlbums" @click.self="$router.push(`playlists/${playlist.id}`)">
+        <div class="playlist-picture" @click.self="$router.push(`playlists/${playlist.id}`)" :style="`background-image: url('${playlist.picture}');`" />
+        <span @click.self="$router.push(`playlists/${playlist.id}`)" class="playlist-name">
           {{playlist.name}}
         </span>
         <div class="arrow material-symbols-rounded" @click="changeToAlbum(playlist)">
@@ -121,11 +135,11 @@ const favoriteMusics = JSON.parse(localStorage.getItem('objectArray')) || [];
       </div>
     </div>
 
-    <div class="recent head">
+    <div v-if="recentMusics?.length" class="recent head">
       <h2>Последняя музыка</h2>
     </div>
-    <div class="recent-music">
-      <div class="recent" v-for="(recent, index) in favoriteMusics">
+    <div class="recent-music" v-if="recentMusics?.length">
+      <div class="recent" v-for="(recent, index) in recentMusics">
         <div class="music-picture" :style="`background-image: url('${recent.image}');`">
           <button
               class="material-symbols-outlined"
@@ -147,13 +161,22 @@ const favoriteMusics = JSON.parse(localStorage.getItem('objectArray')) || [];
       </div>
     </div>
   </div>
+
+  <h3 class="noData" v-if="!favoriteAlbums?.length && !favorites?.length && !recentMusics?.length">
+    Раздел пуст. Ничего не сохранено, не добавлено в избранные
+  </h3>
 </div>
 
 </template>
 
 <style scoped lang="scss">
+.noData {
+  text-align: center;
+  margin-top: 200px;
+}
+
 .frame {
-  min-height: calc(100vh + 100px);
+  min-height: calc(80vh);
   width: 100%;
   margin-bottom: 45px;
 

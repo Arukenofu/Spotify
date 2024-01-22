@@ -10,7 +10,7 @@ const themes = [
   {
     id: 2,
     description: 'Celestial Azure',
-    color: '#336ce8'
+    color: '#1065c0'
   },
   {
     id: 3,
@@ -20,17 +20,17 @@ const themes = [
   {
     id: 4,
     description: 'Mystic Orchid',
-    color: '#8c2eff'
+    color: '#a564d3'
   },
   {
     id: 5,
     description: 'Golden Radiance',
-    color: '#cbad34'
+    color: '#efb827'
   },
   {
     id: 6,
     description: 'Pearl Frost',
-    color: '#d1e9ff'
+    color: '#aaa2b1'
   },
 ];
 

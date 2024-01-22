@@ -3,6 +3,7 @@ import {computed, onMounted, ref, watch} from "vue";
 import {useMediaControls} from '@vueuse/core'
 import {musicStore} from "../stores/MusicStore";
 import axios from "axios";
+import Slider from "primevue/slider";
 
 const store = musicStore();
 
@@ -120,9 +121,8 @@ const downloadMusic = async (url) => {
       })
 }
 
-console.log(store.music)
 
-  let objectArray = JSON.parse(localStorage.getItem('objectArray')) || [];
+let objectArray = JSON.parse(localStorage.getItem('objectArray')) || [];
 
 const createObject = (key, name, image, singer, song, timestamp) => {
   return {key, name, image, singer, song, timestamp}
@@ -152,8 +152,6 @@ const addObject = (key, name, image, singer, song) => {
 const isStarlight = ref(false);
 
 onMounted( async () => {
-  audioVolume.value = volume.value * 100;
-
   isStarlight.value = (await axios.post('http://localhost:3000/isStarlight', {
     id: localStorage.getItem('id')
   }, {
@@ -301,7 +299,7 @@ watch(audio, (value) => {
           <span class="music-current-duration">
             {{currentAudioTime}}
           </span>
-        <input type="range" :max="duration" min="0" v-model="currentTime">
+        <slider class="abc" :max="duration" v-model="currentTime" />
         <span class="music-duration">
             {{audioDuration}}
           </span>
@@ -311,7 +309,7 @@ watch(audio, (value) => {
         <button class="material-symbols-rounded">
           {{ volume ? "volume_up" : "volume_off"}}
         </button>
-        <input type="range" max="100" min="0" v-model="audioVolume" @input="volume = audioVolume / 100">
+        <slider class="abc" :max="1" :step="0.01" :min="0" v-model="volume" />
       </div>
 
       <div class="options">
@@ -334,7 +332,7 @@ watch(audio, (value) => {
 
 
 
-<style scoped lang="scss">
+<style lang="scss">
 .media-player {
   border-top: 1px #333333 solid;
   z-index: 2;
@@ -432,6 +430,32 @@ watch(audio, (value) => {
         color: #d2d2d2;
       }
 
+      .abc {
+        height: 4px;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      .p-slider {
+        background-color: #484848;
+        border-radius: 3px;
+      }
+
+      .p-slider-range {
+        background-color: var(--main);
+        border-bottom-left-radius: 3px;
+        border-top-left-radius: 3px;
+      }
+
+      .p-slider-handle {
+        background-color: var(--main);
+        height: 14px;
+        width: 14px;
+        margin-top: calc(2px / 2 - 16px / 2);
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
       input {
         appearance: none;
         height: 4px;
@@ -487,6 +511,33 @@ watch(audio, (value) => {
       button {
         background-color: initial;
         border: none;
+      }
+
+      .abc {
+        height: 4px;
+        width: 120px;
+        background-color: #484848;
+        cursor: pointer;
+      }
+
+      .p-slider {
+        background-color: #484848;
+        border-radius: 3px;
+      }
+
+      .p-slider-range {
+        background-color: var(--main);
+        border-bottom-left-radius: 3px;
+        border-top-left-radius: 3px;
+      }
+
+      .p-slider-handle {
+        background-color: var(--main);
+        height: 14px;
+        width: 14px;
+        margin-top: calc(2px / 2 - 16px / 2);
+        border-radius: 50%;
+        cursor: pointer;
       }
 
       input {
@@ -602,9 +653,5 @@ watch(audio, (value) => {
   100% {
     rotate: 360deg;
   }
-}
-
-@media screen {
-
 }
 </style>

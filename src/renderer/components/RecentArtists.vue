@@ -1,19 +1,19 @@
 <script setup>
 const artists = [
   {
-    id: 1,
-    picture: 'https://cdns-images.dzcdn.net/images/cover/eea9f7fc913300e40307a0ff70dc73cf/264x264.jpg'
+    id: 5,
+    picture: 'http://localhost:3000/images/albums/The%20Weeknd/813XseYNw1L._UF894,1000_QL80_.jpg'
   },
   {
-    id: 2,
-    picture: 'https://f4.bcbits.com/img/a2145598503_10.jpg'
+    id: 6,
+    picture: 'http://localhost:3000/images/albums/Persona%205/folder.jpg'
   },
   {
-    id: 3,
-    picture: 'https://www.udiscovermusic.com/wp-content/uploads/2017/08/Nirvana-Nevermind.jpg'
+    id: 7,
+    picture: 'http://localhost:3000/images/albums/Anime/folder.jpg'
   },
   {
-    id: 4,
+    id: 8,
     picture: 'https://www.figma.com/file/gTfTPLSZqjVKHMWEYu8kad/image/7956bfa0d9442fb981384e6e3f59da0788351640'
   }
 ]
@@ -23,7 +23,12 @@ const artists = [
   <div class="recent-artists">
     <h3>Также рекомендуем</h3>
     <div class="artists">
-      <div class="artist" v-for="artist in artists" :key="artist.id" :style="`background-image: url(${artist.picture}) `">
+      <div class="artist"
+           v-for="artist in artists"
+           :key="artist.id"
+           :style="`background-image: url(${artist.picture}) `"
+           @click="$router.push(`/playlists/${artist.id}`)"
+      >
 
       </div>
     </div>

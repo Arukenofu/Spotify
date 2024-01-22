@@ -10,11 +10,21 @@ const route = useRoute()
 const store = musicStore();
 
 const album = store.albums[store.currentPlaylistId];
-const colors = ref([])
+const colors = ref([]);
+const isFavorite = ref();
 
 onMounted(async () => {
   playing.value = store.playing;
   isStoreAlbum() ? colors.value = (await axios.post('http://localhost:3000/color', {image: currentMusic.value.picture})).data : '';
+
+  isFavorite.value = (await axios.post('http://localhost:3000/isFavoriteAlbum', {
+    albumid: route.params.id ? route.params.id : store.currentPlaylistId,
+    userid: localStorage.getItem('id')
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })).data
 })
 
 const audio = ref(document.getElementById('musicRoot'))
@@ -39,6 +49,7 @@ const currentMusic = computed(() => {
   }
   return store.albums[store.currentPlaylistId-1]
 })
+console.log(store.albums[store.currentPlaylistId-1]);
 
 const currentAlbum = computed(() => {
   if (route.params.id) {
@@ -50,8 +61,37 @@ const currentAlbum = computed(() => {
 const checkParams = () => {
   if (route.params.id) {
     store.music = store.albums[route.params.id-1].musics;
-    store.currentPlaylistId = route.params.id+1
+    store.currentPlaylistId = Number(route.params.id)
   }
+}
+
+const changeFavorites = async () => {
+  if (isFavorite.value === false) {
+    await axios.post('http://localhost:3000/addFavoriteAlbum', {
+      userid: localStorage.getItem('id'),
+      albumid: route.params.id ? route.params.id : store.currentPlaylistId
+    }, {
+      headers: {
+        Authorization: `${localStorage.getItem('token')}`,
+      }
+    })
+
+    isFavorite.value = true;
+    return;
+  }
+
+  const data = await axios.post('http://localhost:3000/deleteFavoriteAlbum', {
+    userid: localStorage.getItem('id'),
+    albumid: route.params.id ? route.params.id : store.currentPlaylistId
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })
+
+  console.log(data.data);
+
+  isFavorite.value = false;
 }
 </script>
 
@@ -75,6 +115,14 @@ const checkParams = () => {
             <h6>
               {{isStoreAlbum() ? ' pansuman' : ''}} &nbsp;   <span>{{isStoreAlbum() ? currentMusic.tracksamount : store.music.length}} треков</span> &nbsp;<span v-if="isStoreAlbum()">15 мин. 51 сек.</span>
             </h6>
+            <span
+                @click="changeFavorites()"
+                v-if="isStoreAlbum()"
+                class="material-symbols-outlined"
+                :style="isFavorite ? 'color: var(--main)' : ''"
+            >
+              favorite
+            </span>
           </div>
         </div>
       </div>
@@ -256,6 +304,12 @@ const checkParams = () => {
             span:first-child {
               font-weight: 700;
             }
+          }
+
+          & > span {
+            margin-left: 10px;
+            font-size: 1.4rem;
+            cursor: pointer;
           }
         }
       }

@@ -285,11 +285,10 @@ const sendGif = async () => {
       .avatar {
         position: relative;
         margin: 15px auto 0 auto;
-        background-color: #2c2c2c;
         background-size: cover;
         background-position: center;
         clip-path: circle(50% at center);
-        border: 1px #2c2c2c solid;
+        background-color: #FFFFFF;
         width: 90%;
         aspect-ratio: 1/1;
 

@@ -10,6 +10,7 @@ const user = ref();
 const favorites = ref();
 const isRouteParam = ref();
 const subscribes = ref();
+const subscribers = ref();
 const isLoaded = ref(false);
 const route = useRoute();
 const store = musicStore();
@@ -41,12 +42,20 @@ onMounted(async () => {
   })).data
 
   isStarlight.value = (await axios.post('http://localhost:3000/isStarlight', {
-    id:  route.params.id
+    id: route.params.id
   }, {
     headers: {
       Authorization: `${localStorage.getItem('token')}`,
     }
   })).data;
+
+  subscribers.value = (await axios.post('http://localhost:3000/getSubscribers', {
+    userID: route.params.id
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })).data
 
   isLoaded.value = true;
 })
@@ -106,8 +115,6 @@ watch (() => route.params.id, async () => {
         Authorization: `${localStorage.getItem('token')}`,
       }
     })).data
-
-    console.log(isSubscribed.value);
   }
 
   subscribes.value = (await axios.post('http://localhost:3000/getSubscribes', {
@@ -121,6 +128,14 @@ watch (() => route.params.id, async () => {
       Authorization: `${localStorage.getItem('token')}`,
     }
   })).data;
+
+  subscribers.value = (await axios.post('http://localhost:3000/getSubscribers', {
+    userID: route.params.id
+  }, {
+    headers: {
+      Authorization: `${localStorage.getItem('token')}`,
+    }
+  })).data
 
   isLoaded.value = true;
 })
@@ -166,20 +181,20 @@ const togglePlayArrowById = (el) => {
           Страна
         </span>
         <p>
-          {{user.location}}
+          {{user.location ? user.location : 'Нет данных'}}
         </p>
       </div>
     </div>
 
     <div class="body-info">
       <p>
-        Пол: {{user.gender}}
+        Пол: {{user.gender ? user.gender : 'Неизвестно'}}
       </p>
       <p>
         Подписки: {{subscribes.length}}
       </p>
       <p>
-        Подписчики: 12
+        Подписчики: {{subscribers}}
       </p>
     </div>
 
@@ -230,12 +245,21 @@ const togglePlayArrowById = (el) => {
         <p>{{subscribe.description}}</p>
       </div>
     </div>
+
+    <h3 class="noData" v-if="!favorites?.length && !subscribes?.length">
+      Нет данных.
+    </h3>
   </div>
 
 </div>
 </template>
 
 <style scoped lang="scss">
+.noData {
+  text-align: center;
+  margin-top: 220px;
+}
+
 .layout {
   display: flex;
 
@@ -253,6 +277,7 @@ const togglePlayArrowById = (el) => {
       border-radius: 50%;
       background-position: center;
       background-size: cover;
+      background-color: #FFFFFF;
     }
 
     .username {
@@ -364,12 +389,12 @@ const togglePlayArrowById = (el) => {
           border-radius: 9px;
           width: 19%;
           aspect-ratio: 1/1.25;
-          background-color: #050505;
+          background-color: #090909;
           transition: 0.2s;
           padding: 15px;
 
           &:hover {
-            background-color: #090909;
+            background-color: #1f1f1f;
 
             .image button {
               opacity: 1;

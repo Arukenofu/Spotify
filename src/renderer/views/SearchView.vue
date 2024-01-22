@@ -182,6 +182,9 @@ watch(search, async () => {
         <div class="albums-wrap">
           <div class="album" v-for="user in users" :key="user.id" @click="$router.push(`/user/${user.id}`)">
             <div class="picture" :style="`background-image: url('${user.avatar}')`">
+              <span v-if="!user.avatar">
+                Нет изображения
+              </span>
             </div>
             <h3>
               {{user.username}}
@@ -189,7 +192,7 @@ watch(search, async () => {
                 stars
               </span>
             </h3>
-            <p>{{user.description}}</p>
+            <p>{{user.description || 'Нет описания'}}</p>
           </div>
         </div>
       </div>
@@ -488,6 +491,16 @@ watch(search, async () => {
             margin-bottom: 15px;
             background-size: cover;
             background-position: center;
+            background-color: #FFFFFF;
+
+            span {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: #1a1a1a;
+              height: 100%;
+              font-weight: 600;
+            }
           }
           h3 {
             font-size: 1.5rem;
